@@ -1,4 +1,4 @@
-# List of all computer science courses / trainings taken
+# List of Courses and Trainings
 
 ## CS50
 
