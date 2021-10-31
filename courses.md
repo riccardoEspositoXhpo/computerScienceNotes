@@ -11,5 +11,5 @@
 
 ## Python 4 Everybody
 
-- Platform: Website + Youtube Videos
+- Platform: Website + Youtube
 
