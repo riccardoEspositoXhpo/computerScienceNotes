@@ -414,9 +414,6 @@ int main(void)
 }
 ```
 
-
-```
-
 ### Linked Lists
 
 ```c
