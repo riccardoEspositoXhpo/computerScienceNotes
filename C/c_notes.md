@@ -170,6 +170,8 @@ int main(void)
 // more string manipulation, including strcopy
 # include <string.h>
 
+# include <math.h>
+
 int main(void)
 {
 
@@ -595,7 +597,7 @@ void print_tree(node *root)
 
 ```c
 
-// sampel struct to define purson, has two pointers to different person structs for parents
+// sample struct to define purson, has two pointers to different person structs for parents
 typedef struct person
 {
     struct person *parents[2];
