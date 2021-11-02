@@ -38,6 +38,9 @@ else:
 
 i = 0:
 
+if x in ['yes','no']:
+    # do stuff
+
 while i < 3:
     # do stuff
     i += 1
@@ -68,13 +71,115 @@ for k in range(3):
 - dict - stores keys and values { "name" : "Beily", "number": 1}
 - set - collection of values without duplicates
 
+### Functions and main execution
+
+- For safety, as the codebase expands, you may want to explicitly call out which functions you want to run. Code could look something like this:
+
+```python
+
+def main():
+    barf(3)
+
+def barf(n):
+    for i in range(3):
+        print("barf")
+
+# this is one option to run only explicit functions
+main()
+
+# assuming your file is called main.py and your function is main
+if __name__ == '__main__'
+    main()
+
+```
+
+### Print Function 
+
+```python
+
+# print automatically puts a newline at the end of the print, you can override
+print("hello", end = '') 
+
+```
+
+### User input
+
+```python
+
+from sys import argv
+
+if len(argv) == 2:
+    # do stuff
+    print(argv[1])
+
+```
+
+### Files
+
+```python
+
+import csv
+
+with open("file.csv","a") as file:
+    writer = csv.writer(file)
+    writer.writerow(["hello","world"])
+
+    # read data into a python dict
+    reader = csv.Dictreader(file)
+
+    # looping file rows
+    for row in reader:
+
+        title = row["hello"]
 
 
-
-
+```
 
 ## Advanced Topics
 
 
+### Lambda Function
+
+```python
+
+titles = new Dict()
+
+# the sorted function accepts a custom sorting algo
+# the lambda function is a nemeless function, you just specify input/output
+# in this case we are sorting, in reverse order, based on the value and not the key of the dict
+sorted(title, key=lambda title: titles[title]), reverse = True)
+
+```
+
+### Sqlite
+
+- Use sqlite3 library here instead of cs50
+
 ## Libraries and functions
 
+```python
+
+# list of libraries I have used
+
+# image processing library
+from PIL import Image, ImageFilter
+
+# system lib - argv is for user input
+from sys import argv
+
+# file processing
+import csv
+
+
+```
+
+## Tips and Tricks
+
+```python
+
+# sort array
+sorted(array)
+
+
+
+```
