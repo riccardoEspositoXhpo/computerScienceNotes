@@ -1,4 +1,4 @@
-# Wiki of C Notes divided by section
+# C Wiki
 
 ## Basics
 
