@@ -71,6 +71,47 @@ for k in range(3):
 - dict - stores keys and values { "name" : "Beily", "number": 1}
 - set - collection of values without duplicates
 
+## Copying Data
+
+```python
+
+#python simplifies a lot, but we must remember that this is still built on top of C.
+#this means that we still have a memory address for data, and the value of that address
+# copying a variable can have undesired effects, because it could just essentially point two pointers to the same address
+
+
+import copy
+
+def main():
+
+    # Ensure correct usage
+    if len(sys.argv) != 3:
+
+        sys.exit("Usage: python dna.py DATABASE.csv SAMPLE.csv")
+
+    # load the database into a dict
+    sequenceCount = []
+
+    with open(sys.argv[1], "r") as database:
+
+        reader = csv.DictReader(database)
+
+        for row in reader:
+
+            sequenceCount.append(row)
+
+    # define an identical dict with no name key
+    sequenceCountNoName = copy.deepcopy(sequenceCount)
+
+    for i in range(len(sequenceCountNoName)):
+
+        sequenceCountNoName[i].pop('name')
+
+# The point here is that if you don't deepCopy, this code will pop name from both objects.
+
+
+```
+
 ### Functions and main execution
 
 - For safety, as the codebase expands, you may want to explicitly call out which functions you want to run. Code could look something like this:
@@ -361,7 +402,6 @@ def main():
 
         # delete task
         delete_task(conn, 2)
-
 
         
         print("1. Query task by priority:")
