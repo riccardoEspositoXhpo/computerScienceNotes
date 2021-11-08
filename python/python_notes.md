@@ -180,6 +180,27 @@ with open("file.csv","a") as file:
 
 ## Advanced Topics
 
+### Project Requirements
+
+requirements.txt is used to flag the library requirements in order to run the app.
+
+Assuming you are working in a virtual environment (meaning you only install the packages you need), this can be achieved by:
+
+```
+
+pip install pipreqs
+
+pipreqes /path/to/project
+
+```
+
+When you already have a requirements.txt file, you can install by:
+
+```
+
+pip install -r requirements.txt
+
+```
 
 ### Lambda Function
 
