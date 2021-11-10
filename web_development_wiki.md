@@ -7,8 +7,8 @@
 To get a Flask app running and deploy a web server it is advised to use the following directory structure
 
 * Project Name - hosts app.py, .py, requirements.txt
-** static - hosts .css, .js and any other static file (i.e. images, gif, ...)
-** templates - hosts .html files
+    * static - hosts .css, .js and any other static file (i.e. images, gif, ...)
+    * templates - hosts .html files
 
 
 
