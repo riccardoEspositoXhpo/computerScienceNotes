@@ -14,8 +14,145 @@ To get a Flask app running and deploy a web server it is advised to use the foll
 
 ## Flask 
 
+Flask is a python library built to handle the server-side in a web application. It makes it quite easy to develop in python and deploy the results to the web.
+
+### Flask Functions
+
+```python
+from flask import Flask, flash, jsonify, redirect, render_template, request, session
+
+from flask_mail import Mail, Message
+
+# below also used in conjunction with flask
+from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
+```
+
+### Flask App configurations
+
+```python
+
+import Flask
+
+# Configure application
+app = Flask(__name__)
+
+# Ensure templates are auto-reloaded - if not you need to restart the server on every change
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+# mail related configurations
+app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+
+# session configuration
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+
+
+```
+
+### App Routes
+
+```python
+
+# this defines the homepage '/' and renders an html template in templates/index.html
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+# render_template supports passing variables used with Jinja
+    return render_template("index.html", python_var_1 = jinja_var_1, python_var_2 = jinja_var_2)
+
+
+# send data to front-end in json format. This is useful when interacting with a DB
+array = []
+
+return jsonify(array)
+return render_template("index.html", array = array)
+
+
+
+
+```
+
+## Route Methods
+
+```python
+
+# a flask app supports various methods for each route as follows
+
+# GET = when I want to read contents of the page
+# POST = when I am anonymously submitting data to the page
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    # request is an object that contains, amongst other things, the type of request or method
+    if request.method == "POST":
+        
+        # imagine that login.html has a "Log In" button. When you press that, it is likely that you are sending a POST request
+        # In this case it will redirect you to the home page
+        return redirect("/")
+    
+    # the below is equivalent to saying if request.method == "GET" (or NOT POST). When I "open" the page, I need to see login.html so I can actually log-in and submit that POST request we see above.
+    return render_template("login.html")
+
+
+```
+
+### Retrieve Front-End Data
+
+```python
+
+@app.route("/", methods = ["GET","POST"])
+def index():
+
+    # retrieve front-end data. Please note this corresponds to an HTML element with this name
+    name = request.form.get("name")
+    email = request.form.get("email")
+    sport = request.form.get("sport")
+
+    # retrieve a JSON from front-end - TODO
+    table = request.get_json()
+
+    # remember data from front-end
+    email = session["email"]
+
+
+
+```
+
+### Route Decorators
+
+```python
+
+@app.route("/login", methods=["GET", "POST"])
+@login_required
+def login():
+    # function data here
+
+
+# login_required function is a decorator, means it is a one-liner that adds common functionality to many routes.
+def login_required(f):
+    """
+    Decorate routes to require login.
+
+    https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/
+    """
+    @wraps(f)
+
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+```
 
 ## Jinja
 
@@ -93,6 +230,7 @@ Jinja then uses the following syntax to display the above mentioned variables
 
 
 ```
+
 
 
 
@@ -368,8 +506,21 @@ HTML, known as Hyper Text Markup Language, is used to render web pages.
 ```
 
 
+### Forms
+
+Forms allow you to send requests to the server-side of the application
+
+```html
+
+    <form action="/login" method="post">
+        <input autocomplete="off" autofocus name="name" placeholder="Name" type="text">
+        <input type="submit" value="Log In">
+    </form>
 
 
+```
+
+When configured with Flask, this will send a request.method = 'POST' to the /login route of the web-app.
 
 
 ## CSS
