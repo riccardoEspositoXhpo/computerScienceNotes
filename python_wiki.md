@@ -1,6 +1,6 @@
 # Python Wiki
 
-## Basics
+## General
 
 ### Code Basics
 
@@ -23,7 +23,7 @@ print(f"hello, {answer}")
 
 ```
 
-## Loops and Conditions
+### Loops and Conditions
 
 ```python
 
@@ -57,9 +57,21 @@ for j in [0,1,2]:
 for k in range(3):
     # do stuff
 
+try:
+    # try to do something
+
+except: 
+    # do something else if you failed
+
+except ValueError:
+    # do something in case of specific error
+
+except FileNotFoundError:
+
+
 ```
 
-## Data Types
+### Data Types
 
 - bool
 - str (string)
@@ -71,7 +83,7 @@ for k in range(3):
 - dict - stores keys and values { "name" : "Beily", "number": 1}
 - set - collection of values without duplicates
 
-## Copying Data
+### Copying Data
 
 ```python
 
@@ -178,7 +190,157 @@ with open("file.csv","a") as file:
 
 ```
 
-## Advanced Topics
+### Lambda Function
+
+```python
+
+titles = new Dict()
+
+# the sorted function accepts a custom sorting algo
+# the lambda function is a nemeless function, you just specify input/output
+# in this case we are sorting, in reverse order, based on the value and not the key of the dict
+sorted(title, key=lambda title: titles[title]), reverse = True)
+
+```
+
+### List Comprehensions
+
+Time and Space efficient ways to create lists in python
+
+```python
+
+fruits = ["apple", "banana", "cherry", "kiwi", "mango"]
+
+# simple list
+newlist = [x for x in fruits]
+
+# condition
+newlist = [x for x in fruits if "a" in x]
+
+# iterable
+newlist = [x for x in range(10)]
+
+# iterable with condition
+newlist = [x for x in range(10) if x < 5]
+
+# other manipulations
+newlist = [x.upper() for x in fruits]
+
+# modify elements
+newlist = ['hello' for x in fruits]
+
+# expressions
+newlist = [x if x != "banana" else "orange" for x in fruits]
+
+# n dimensional array of 0 
+array = [0 for i in range(n)] for i in range(n)
+
+
+```
+
+### Loading Configuration Files
+
+```python
+
+# separate sample file config.yml
+script_options:
+  # Switch between testnet and mainnet
+  # Setting this to False will use REAL funds, use at your own risk
+  VARIABLE_NAME: True
+
+# python script
+import yaml
+
+def configLoader():
+    file = './config.yml'
+
+    try:
+        with open(file) as file:
+            return yaml.load(file, Loader=yaml.FullLoader)
+    except FileNotFoundError as fe:
+        exit(f'Could not find {file}')
+
+    except Exception as e:
+        exit(f'Encountered exception...\n {e}')
+
+
+parsed_config = configLoader()
+
+VARIABLE_NAME = parsed_config['script_options']['VARIABLE_NAME']
+
+
+```
+
+### Threading
+
+Threading enables you to run a python program and execute multiple scripts at the same time in "threads".
+
+```python
+
+import threading
+import importlib
+
+my_module = {}
+
+MODULES = [
+    'modulename1',
+    'modulename2'
+]
+
+for module in MODULES:
+    
+    # dynamically imports modulename1.py and modulename2.py
+    mymodule[module] = importlib.import_module(module)
+
+    # starts threads by calling "function_name" function, has ability to pass args
+    # it is ideal to create modules with exactly the same function names so you can scalably reference them
+    thread = threading.Thread(target=mymodule[module].function_name, args=())
+    thread.daemon = True
+    thread.start()
+
+```
+
+### Coloring Console Output
+
+```python
+
+from colorama import init
+init()
+
+# for colorful logging to the console
+class txcolors:
+    WARNING = '\033[93m'
+    BAD = '\033[91m'
+    GOOD = '\033[32m'
+    DIM = '\033[2m\033[35m'
+    DEFAULT = '\033[39m'
+
+
+```
+
+### Variable Scope
+
+```python
+
+number = 5
+
+def bad_scoping():
+
+    # this breaks because number is not initialized
+    number += 5 
+    print(number)
+
+def good_scoping():
+
+    # access a global variable
+    global number
+
+    number += 5
+    print(number)
+
+```
+
+## Projects
 
 ### Project Requirements
 
@@ -231,18 +393,7 @@ Good practice when setting up multiple virtual environments is to split your dir
 
 This ensures that we keep a consistent naming convention, knowing which is which, but also that we don't clutter the Project directory with virtualenv system files, especially if we intend to use GIT and don't want to ".gitignore" all the files.
 
-### Lambda Function
-
-```python
-
-titles = new Dict()
-
-# the sorted function accepts a custom sorting algo
-# the lambda function is a nemeless function, you just specify input/output
-# in this case we are sorting, in reverse order, based on the value and not the key of the dict
-sorted(title, key=lambda title: titles[title]), reverse = True)
-
-```
+## Databases
 
 ### Sqlite
 
@@ -464,44 +615,61 @@ if __name__ == '__main__':
     main()
 
 
-
-
-
 ```
 
-## Libraries and functions
+## Image Processing
+
+### CV2
 
 ```python
 
-# list of libraries I have used and their use
+import cv2
 
-# image processing library
-from PIL import Image, ImageFilter
 
-# system lib - argv is for user input
-from sys import argv
+# converts image to grayscale
+image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-# file processing
-import csv
+# applies Gaussian Blur
+image = cv2.GaussianBlur(img, (9, 9), 0)
 
-# time functions
-import time
+# reverses colors on existing image
+image = cv2.bitwise_not(image, image)
 
-# paths, read, write, delete files
-import os
+# find contours
+contours = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-#
+# get rotation necessary from corner array and dimension array
+grid = cv2.getPErspectiveTransform(corners, dimensions)
 
+# rotate image based on grid
+warped = cv2.warpPerspective(image, grid, (width, height))
+
+# resize an image to 2000 x 2000 pixels
+image_large = cv2.resize(image, (2000, 2000))
+
+# write image to filesystem
+cv2.imwrite('location/on/filesystem/filename.img', image)
+
+# read image from filesystem
+cv2.imread('location/on/filesystem/filename.img')
 
 ```
 
-## Tips and Tricks
+### Pytesseract
 
 ```python
 
-# sort array
-sorted(array)
+import pytesseract
 
+# configuration parameters
+xconfigs = '--psm 6 digits -c page_separator='''
+# there are various psm modes, used to better identify different content types. 6 is good for single numbers
+# page separator null means we will not get a symbol at the end of the string
+
+# switch to --psm 8 digits to better read strings
+
+# simple use for image recognition
+string = pytesseract.image_to_string(imageLocationOnDisk, config = xconfig)
 
 
 ```
