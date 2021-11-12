@@ -28,9 +28,73 @@ It is especially helpful when dynamically filling HTML pages in a flask app, by 
 With Jinja we can define a template, i.e layout.html, and use Jinja to construct "similar" pages.
 
 ```html
+<!-- layout Page -->
+<!DOCTYPE html>
 
-TBD 
+<html lang="en">
+    <head>
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <title>Web Page</title>
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+    </body>
+</html>
+
+
+<!-- success page -->
+{% extends "layout.html" %}
+
+<!-- here we tell Jinja how to replace the placeholders defined in the previous page -->
+{% block body %}
+    You are registered!
+{% endblock %}
+
+ 
 ```
+
+### Jinja Variables, Loops, Conditions
+
+Jinja integrates well with Flask and it can receive variables to be displayed dynamically in HTML.
+Firstly we send the variable via Flask
+
+```python
+
+# message is some string, rawPuzzle is n x n array
+message = '' 
+rawPuzzle = []
+return render_template('index.html', message = message, rawPuzzle = rawPuzzle)
+
+```
+
+Jinja then uses the following syntax to display the above mentioned variables
+
+```html
+
+<!-- variables -->
+ <p><h4>{{message}}</h4></p>
+
+<tbody>
+    <!-- loops -->
+    {% for row in rawPuzzle %}
+            <tr>
+                {% for num in row %}  
+                    <!-- conditions -->
+                    {% if num == 0 %}
+                        <td contenteditable='true' oncopy="return false" oncut="return false" onpaste="return false">
+                    {% endif %}
+                    {% if num != 0 %}
+                        <td contenteditable='true' oncopy="return false" oncut="return false" onpaste="return false">{{num}}
+                    {% endif %}
+                {% endfor %}
+            </tr>
+    {% endfor %}
+</tbody>
+
+
+```
+
+
 
 ## HTML
 
