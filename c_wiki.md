@@ -3,11 +3,13 @@
 ## Basics
 
 ### File Headers
+
 ```c
 #include <stdio.h>
 ```
 
 ### Basic Code Format
+
 ```c
 
 // void is the argument of the function, see argc/argv for more
@@ -119,7 +121,6 @@ int main(void){
 
 ### Custom Functions and Prototypes
 
-
 ```c
 
 // the code is executed in order, you must signal the existence of a function before main actually
@@ -213,7 +214,6 @@ int main(void)
 }
 ```
 
-
 ### User Input
 
 ```c
@@ -231,7 +231,7 @@ int main(int argc, string argv[])
 
 ### Type casting
 
-```c 
+```c
 
 int main(void)
 {
@@ -322,7 +322,7 @@ void swap(int *a, int *b)
 
 ### Malloc
 
-```c 
+```c
 
 int main(void)
 {
@@ -392,7 +392,6 @@ int main(void)
 
 }
 ```
-
 
 ### ASCII
 
@@ -503,7 +502,6 @@ int main(void)
 }
 
 ```
-
 
 ### Binary Tree
 
@@ -679,17 +677,16 @@ person *create_family(int generations)
 
 Visualized, recursion looks like this:
 
-- [Gen 3] Enter Function
-    - [Gen 2] Enter Function
-        - [Gen 1] Enter Function
-        - Assign data to Gen 1
-        - Function returns
-    - Assign data to Gen 2
-    - Function returns
-- Assign data to Gen 3
-- Function returns
+* [Gen 3] Enter Function
+  * [Gen 2] Enter Function
+    * [Gen 1] Enter Function
+      * Assign data to Gen 1
+        * Function returns
+    * Assign data to Gen 2
+      * Function returns
+* Assign data to Gen 3
+  * Function returns
 
 Essentially, it starts and goes all the way to the end, and then returns again and again until it is back at the top.
-
 
 ## Tips and Tricks

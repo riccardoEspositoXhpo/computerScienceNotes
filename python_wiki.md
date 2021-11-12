@@ -136,7 +136,7 @@ if __name__ == '__main__'
 
 ```
 
-### Print Function 
+### Print Function
 
 ```python
 
@@ -186,7 +186,7 @@ requirements.txt is used to flag the library requirements in order to run the ap
 
 Assuming you are working in a virtual environment (meaning you only install the packages you need), this can be achieved by:
 
-```
+```bash
 
 pip install pipreqs
 
@@ -196,11 +196,40 @@ pipreqes /path/to/project
 
 When you already have a requirements.txt file, you can install by:
 
-```
+```bash
 
 pip install -r requirements.txt
 
 ```
+
+### Virtual Environments
+
+Since python is known for the large number of libraries, it is easy to clutter the system. In addition, code could work on your machine given a very specific version number of a library, but not work on other machines.
+
+In order to isolate our development environment from any external factors and avoid cluttering our machine we can use virtualenv
+
+```python
+
+pip isntall virtualenv
+
+# creates a virtual environment in the current directory
+virtualenv project_name
+
+# switches your python interpreter to read from virtualenv
+source project_name/bin/activate
+
+```
+
+Good practice when setting up multiple virtual environments is to split your directories as follows:
+
+- Projects
+  - proj_1
+  - proj_2
+- VirtualEnvs
+  - proj_1
+  - proj_2
+
+This ensures that we keep a consistent naming convention, knowing which is which, but also that we don't clutter the Project directory with virtualenv system files, especially if we intend to use GIT and don't want to ".gitignore" all the files.
 
 ### Lambda Function
 
@@ -438,14 +467,13 @@ if __name__ == '__main__':
 
 
 
-``` 
-
+```
 
 ## Libraries and functions
 
 ```python
 
-# list of libraries I have used
+# list of libraries I have used and their use
 
 # image processing library
 from PIL import Image, ImageFilter

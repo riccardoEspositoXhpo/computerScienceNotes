@@ -7,12 +7,10 @@
 To get a Flask app running and deploy a web server it is advised to use the following directory structure
 
 * Project Name - hosts app.py, .py, requirements.txt
-    * static - hosts .css, .js and any other static file (i.e. images, gif, ...)
-    * templates - hosts .html files
+  * static - hosts .css, .js and any other static file (i.e. images, gif, ...)
+  * templates - hosts .html files
 
-
-
-## Flask 
+## Flask
 
 Flask is a python library built to handle the server-side in a web application. It makes it quite easy to develop in python and deploy the results to the web.
 
@@ -231,9 +229,6 @@ Jinja then uses the following syntax to display the above mentioned variables
 
 ```
 
-
-
-
 ## HTML
 
 HTML, known as Hyper Text Markup Language, is used to render web pages.
@@ -269,10 +264,7 @@ HTML, known as Hyper Text Markup Language, is used to render web pages.
 
 ```
 
-
-
 ### List of attributes and tags
-
 
 ```html
 
@@ -347,7 +339,6 @@ HTML, known as Hyper Text Markup Language, is used to render web pages.
 
 ### Headers
 
-
 ```html
 <!DOCTYPE html>
 
@@ -395,11 +386,9 @@ HTML, known as Hyper Text Markup Language, is used to render web pages.
 
 </html>
 
-``` 
-
+```
 
 ### Images
-
 
 ```html
 
@@ -419,7 +408,6 @@ HTML, known as Hyper Text Markup Language, is used to render web pages.
 
 ```
 
-
 ### Links
 
 ```html
@@ -438,7 +426,6 @@ HTML, known as Hyper Text Markup Language, is used to render web pages.
 </html>
 
 ```
-
 
 ### Lists
 
@@ -464,9 +451,7 @@ HTML, known as Hyper Text Markup Language, is used to render web pages.
 
 ```
 
-
 ### Tables
-
 
 ```html
 <!DOCTYPE html>
@@ -505,7 +490,6 @@ HTML, known as Hyper Text Markup Language, is used to render web pages.
 
 ```
 
-
 ### Forms
 
 Forms allow you to send requests to the server-side of the application
@@ -521,7 +505,6 @@ Forms allow you to send requests to the server-side of the application
 ```
 
 When configured with Flask, this will send a request.method = 'POST' to the /login route of the web-app.
-
 
 ## CSS
 
@@ -548,7 +531,7 @@ CSS is not a programming language, but is typically used in conjunction to HTML 
         </footer>
     </body>
 </html>
-``` 
+```
 
 ### List of CSS Tags and Attributes
 
@@ -685,8 +668,7 @@ main img
 </html>
 
 
-``` 
-
+```
 
 ### Classes
 
@@ -807,12 +789,6 @@ main img
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
 ```
-
-
-
-
-
-
 
 ## Javascript
 
@@ -965,8 +941,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </body>
 </html>
 
-``` 
-
+```
 
 ### Change Style Dynamically
 
