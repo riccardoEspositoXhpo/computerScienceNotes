@@ -340,6 +340,25 @@ def good_scoping():
 
 ```
 
+### String Operations
+
+```python
+
+# Strings are immutable, when you modify a string it typically returns a new string back
+string = "hello how are you"
+
+if "hello" in string:
+    # this is True
+
+new_string = string.replace("hello", "hello guys")
+
+if string.endswith("you"):
+    # this is True
+
+
+
+```
+
 ## Projects
 
 ### Project Requirements
