@@ -1,6 +1,6 @@
 # Python Wiki
 
-## Basics
+## General Topics
 
 ### Code Basics
 
@@ -23,7 +23,7 @@ print(f"hello, {answer}")
 
 ```
 
-## Loops and Conditions
+### Loops and Conditions
 
 ```python
 
@@ -59,7 +59,7 @@ for k in range(3):
 
 ```
 
-## Data Types
+### Data Types
 
 - bool
 - str (string)
@@ -71,7 +71,7 @@ for k in range(3):
 - dict - stores keys and values { "name" : "Beily", "number": 1}
 - set - collection of values without duplicates
 
-## Copying Data
+### Copying Data
 
 ```python
 
@@ -136,7 +136,7 @@ if __name__ == '__main__'
 
 ```
 
-### Print Function 
+### Print Function
 
 ```python
 
@@ -186,7 +186,7 @@ requirements.txt is used to flag the library requirements in order to run the ap
 
 Assuming you are working in a virtual environment (meaning you only install the packages you need), this can be achieved by:
 
-```
+```unix
 
 pip install pipreqs
 
@@ -196,7 +196,7 @@ pipreqes /path/to/project
 
 When you already have a requirements.txt file, you can install by:
 
-```
+```unix
 
 pip install -r requirements.txt
 
@@ -214,6 +214,112 @@ titles = new Dict()
 sorted(title, key=lambda title: titles[title]), reverse = True)
 
 ```
+
+### Regular Expressions
+
+Also known as regexp or regex, they provide shortcuts to match strings of text.
+
+```python
+
+# library to access regular expressions
+import re
+
+""" Regular Expression Dictionary
+
+^        Matches the beginning of a line
+
+$        Matches the end of the line
+
+.        Matches any character
+
+\s       Matches whitespace
+
+\S       Matches any non-whitespace character
+
+*        Repeats a character zero or more times
+
+*?       Repeats a character zero or more times (non-greedy)
+
++        Repeats a character one or more times
+
++?       Repeats a character one or more times (non-greedy)
+
+[aeiou]  Matches a single character in the listed set
+
+[^XYZ]   Matches a single character not in the listed set
+
+[a-z0-9] The set of characters can include a range
+
+(        Indicates where string extraction is to start
+
+)        Indicates where string extraction is to end
+
+"""
+
+# functions
+
+# searches for a patter within a string - returns boolean
+re.search()
+# searches for all instances of a pattern within a string - returns a list. If not match, list is empty
+re.findall()
+
+# examples
+
+text = 'From: Beily'
+
+# searches start of string
+re.search('^From:', text)
+
+textArray = [
+'X-Sieve: CMU Sieve 2.3',
+'X-DSPAM-Result: Innocent',
+'X-Plane is behind schedule: two weeks',
+'X-: Very short'
+]
+
+for text in textArray:
+    # searches start of string for X, any character, repeated 0 or more times, and : - this matches lines 0,1,2,3
+    re.search('^X.*:', text)
+
+    # searches for X-, matches any non-whitespace character one or more times - this matches 0,1
+    re.search('^X-/S+:')
+
+text = 'My 2 favorite numbers are 19 and 42'
+
+# matches every instance of numerical values of one or more digits
+output = re.findall('[0-9]+', text) # returns ['2', '19', '42']
+
+# greedy matching example - by default we try to match the largest possible string
+text = 'From: Using the : character'
+
+output = re.findall('^F.+:', text) # returns ['From: Using the :']
+
+output = re.findall('^F.+?:', text) # returns ['From:'], adding the ? removes greedy matching
+
+
+# example - retrieving an email address
+re.findall('/S+@/S+', text)
+
+# using parentheses can fine-tune what sub-sting to extract
+text = 'From example@email.com'
+
+# parentheses say what to extract. This ensures we extract an email but only if line starts with 'From'
+re.findall('^From (/S+@/S+)', text)
+
+# extract email domain from substring
+
+text = 'From stephen.marquard@uct.ac.za Sat Jan  5 09:14:16 2008'
+
+# find an @ sign, match non-blank character, one or more times. only extract these non-blank characters
+output = re.findall('@([^ ]*)', text)
+
+# more precise version of above
+output = re.findall('^From .*@([^ ]*)', text)
+
+
+```
+
+
 
 ### Sqlite
 
@@ -433,47 +539,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-``` 
-
-
-## Libraries and functions
-
-```python
-
-# list of libraries I have used
-
-# image processing library
-from PIL import Image, ImageFilter
-
-# system lib - argv is for user input
-from sys import argv
-
-# file processing
-import csv
-
-# time functions
-import time
-
-# paths, read, write, delete files
-import os
-
-#
-
-
-```
-
-## Tips and Tricks
-
-```python
-
-# sort array
-sorted(array)
-
 
 
 ```
