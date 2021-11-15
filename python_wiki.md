@@ -540,3 +540,61 @@ if __name__ == '__main__':
 
 
 ```
+
+### Beautiful Soup
+
+Beautiful soup is used for HTML scraping. It formats and does error handling and returns the HTML in a consumable format
+
+```python
+
+import requests
+from bs4 improt BeuatifulSoup
+
+page = requests.get('https://something.somethingelse.com')
+
+soup = BeautifulSoup(page.content, 'html.parser')
+
+# prints the HTML page with indents
+print(soup.prettify())
+
+# prints ['html', 'n', <html> <head> <title>A simple example page</title> </head> <body> <p>Here is some simple content for this page.</p> </body> </html>]
+list(soup.children)
+
+# [bs4.element.Doctype, bs4.element.NavigableString, bs4.element.Tag]
+newList = [type(item) for item in list(soup.children)]
+
+# from the top we infer that all the tags are in the second element of the list
+html = list(soup.children)[2]
+
+# ['n', <head> <title>A simple example page</title> </head>, 'n', <body> <p>Here is some simple content for this page.</p> </body>, 'n']
+list(html.children)
+
+# grab the body
+body = list(html.children)[3]
+
+# grab the p tags within body - ['n', <p>Here is some simple content for this page.</p>, 'n']
+list(body.children)
+
+# isolate p tag
+p = list(body.children)[1]
+
+# returns 'Here is some simple content for this page.'
+p.get_text()
+
+
+# find all instances of a tag - we can loop through this list
+soup.find_all('p')
+
+# returns first instance of p
+soup.find('p')
+
+# find all elements in p with outer-text class
+soup.find_all('p', class_='outer-text')
+
+# can search by id 
+soup.find_all(id="first")
+
+
+
+
+```
