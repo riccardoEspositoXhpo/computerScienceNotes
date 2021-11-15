@@ -319,8 +319,6 @@ output = re.findall('^From .*@([^ ]*)', text)
 
 ```
 
-
-
 ### Sqlite
 
 ```python

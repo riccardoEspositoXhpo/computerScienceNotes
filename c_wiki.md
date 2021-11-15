@@ -688,4 +688,3 @@ Visualized, recursion looks like this:
 - Function returns
 
 Essentially, it starts and goes all the way to the end, and then returns again and again until it is back at the top.
-
