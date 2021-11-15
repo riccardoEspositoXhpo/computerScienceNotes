@@ -677,14 +677,14 @@ person *create_family(int generations)
 
 Visualized, recursion looks like this:
 
-* [Gen 3] Enter Function
-  * [Gen 2] Enter Function
-    * [Gen 1] Enter Function
-      * Assign data to Gen 1
-        * Function returns
-    * Assign data to Gen 2
-      * Function returns
-* Assign data to Gen 3
-  * Function returns
+- [Gen 3] Enter Function
+  - [Gen 2] Enter Function
+    - [Gen 1] Enter Function
+      - Assign data to Gen 1
+      - Function returns
+    - Assign data to Gen 2
+    - Function returns
+- Assign data to Gen 3
+- Function returns
 
 Essentially, it starts and goes all the way to the end, and then returns again and again until it is back at the top.

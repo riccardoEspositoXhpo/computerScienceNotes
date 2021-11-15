@@ -24,4 +24,3 @@
   - SQL
   - XML
   - HTML
-

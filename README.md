@@ -20,5 +20,3 @@ Browse to the relevant file and either Ctrl + F in the page, or use the Markdown
 ## Future
 
 I plan to add to the wiki going forward.
-
-
