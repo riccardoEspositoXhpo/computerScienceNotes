@@ -1,6 +1,6 @@
 # Python Wiki
 
-## General Topics
+## General
 
 ### Code Basics
 
@@ -56,6 +56,18 @@ for j in [0,1,2]:
 
 for k in range(3):
     # do stuff
+
+try:
+    # try to do something
+
+except: 
+    # do something else if you failed
+
+except ValueError:
+    # do something in case of specific error
+
+except FileNotFoundError:
+
 
 ```
 
@@ -178,30 +190,6 @@ with open("file.csv","a") as file:
 
 ```
 
-## Advanced Topics
-
-### Project Requirements
-
-requirements.txt is used to flag the library requirements in order to run the app.
-
-Assuming you are working in a virtual environment (meaning you only install the packages you need), this can be achieved by:
-
-```unix
-
-pip install pipreqs
-
-pipreqes /path/to/project
-
-```
-
-When you already have a requirements.txt file, you can install by:
-
-```unix
-
-pip install -r requirements.txt
-
-```
-
 ### Lambda Function
 
 ```python
@@ -215,6 +203,214 @@ sorted(title, key=lambda title: titles[title]), reverse = True)
 
 ```
 
+### List Comprehensions
+
+Time and Space efficient ways to create lists in python
+
+```python
+
+fruits = ["apple", "banana", "cherry", "kiwi", "mango"]
+
+# simple list
+newlist = [x for x in fruits]
+
+# condition
+newlist = [x for x in fruits if "a" in x]
+
+# iterable
+newlist = [x for x in range(10)]
+
+# iterable with condition
+newlist = [x for x in range(10) if x < 5]
+
+# other manipulations
+newlist = [x.upper() for x in fruits]
+
+# modify elements
+newlist = ['hello' for x in fruits]
+
+# expressions
+newlist = [x if x != "banana" else "orange" for x in fruits]
+
+# n dimensional array of 0 
+array = [0 for i in range(n)] for i in range(n)
+
+
+```
+
+### Loading Configuration Files
+
+```python
+
+# separate sample file config.yml
+script_options:
+  # Switch between testnet and mainnet
+  # Setting this to False will use REAL funds, use at your own risk
+  VARIABLE_NAME: True
+
+# python script
+import yaml
+
+def configLoader():
+    file = './config.yml'
+
+    try:
+        with open(file) as file:
+            return yaml.load(file, Loader=yaml.FullLoader)
+    except FileNotFoundError as fe:
+        exit(f'Could not find {file}')
+
+    except Exception as e:
+        exit(f'Encountered exception...\n {e}')
+
+
+parsed_config = configLoader()
+
+VARIABLE_NAME = parsed_config['script_options']['VARIABLE_NAME']
+
+
+```
+
+### Threading
+
+Threading enables you to run a python program and execute multiple scripts at the same time in "threads".
+
+```python
+
+import threading
+import importlib
+
+my_module = {}
+
+MODULES = [
+    'modulename1',
+    'modulename2'
+]
+
+for module in MODULES:
+    
+    # dynamically imports modulename1.py and modulename2.py
+    mymodule[module] = importlib.import_module(module)
+
+    # starts threads by calling "function_name" function, has ability to pass args
+    # it is ideal to create modules with exactly the same function names so you can scalably reference them
+    thread = threading.Thread(target=mymodule[module].function_name, args=())
+    thread.daemon = True
+    thread.start()
+
+```
+
+### Coloring Console Output
+
+```python
+
+from colorama import init
+init()
+
+# for colorful logging to the console
+class txcolors:
+    WARNING = '\033[93m'
+    BAD = '\033[91m'
+    GOOD = '\033[32m'
+    DIM = '\033[2m\033[35m'
+    DEFAULT = '\033[39m'
+
+
+```
+
+### Variable Scope
+
+```python
+
+number = 5
+
+def bad_scoping():
+
+    # this breaks because number is not initialized
+    number += 5 
+    print(number)
+
+def good_scoping():
+
+    # access a global variable
+    global number
+
+    number += 5
+    print(number)
+
+```
+
+### String Operations
+
+```python
+
+# Strings are immutable, when you modify a string it typically returns a new string back
+string = "hello how are you"
+
+if "hello" in string:
+    # this is True
+
+new_string = string.replace("hello", "hello guys")
+
+if string.endswith("you"):
+    # this is True
+
+
+
+```
+
+### Web Scraping - BeautifulSoup
+
+Beautiful soup is used for HTML scraping. It formats and does error handling and returns the HTML in a consumable format
+
+```python
+import requests
+from bs4 improt BeuatifulSoup
+
+page = requests.get('https://something.somethingelse.com')
+soup = BeautifulSoup(page.content, 'html.parser')
+
+# prints the HTML page with indents
+print(soup.prettify())
+
+# prints ['html', 'n', <html> <head> <title>A simple example page</title> </head> <body> <p>Here is some simple content for this page.</p> </body> </html>]
+list(soup.children)
+
+# [bs4.element.Doctype, bs4.element.NavigableString, bs4.element.Tag]
+newList = [type(item) for item in list(soup.children)]
+
+# from the top we infer that all the tags are in the second element of the list
+html = list(soup.children)[2]
+
+# ['n', <head> <title>A simple example page</title> </head>, 'n', <body> <p>Here is some simple content for this page.</p> </body>, 'n']
+list(html.children)
+
+# grab the body
+body = list(html.children)[3]
+
+# grab the p tags within body - ['n', <p>Here is some simple content for this page.</p>, 'n']
+list(body.children)
+
+# isolate p tag
+p = list(body.children)[1]
+
+# returns 'Here is some simple content for this page.'
+p.get_text()
+
+# find all instances of a tag - we can loop through this list
+soup.find_all('p')
+
+# returns first instance of p
+soup.find('p')
+
+# find all elements in p with outer-text class
+soup.find_all('p', class_='outer-text')
+
+# can search by id 
+soup.find_all(id="first")
+
+```
+
 ### Regular Expressions
 
 Also known as regexp or regex, they provide shortcuts to match strings of text.
@@ -222,8 +418,8 @@ Also known as regexp or regex, they provide shortcuts to match strings of text.
 ```python
 
 # library to access regular expressions
-import re
 
+import re
 """ Regular Expression Dictionary
 
 ^        Matches the beginning of a line
@@ -260,35 +456,12 @@ $        Matches the end of the line
 
 # searches for a patter within a string - returns boolean
 re.search()
+
 # searches for all instances of a pattern within a string - returns a list. If not match, list is empty
 re.findall()
 
 # examples
-
-<<<<<<< HEAD
-### String Operations
-
-```python
-
-# Strings are immutable, when you modify a string it typically returns a new string back
-string = "hello how are you"
-
-if "hello" in string:
-    # this is True
-
-new_string = string.replace("hello", "hello guys")
-
-if string.endswith("you"):
-    # this is True
-
-
-
-```
-
-## Projects
-=======
 text = 'From: Beily'
->>>>>>> 05e762dbf2af56c844e0628b587ac26e8ace29bd
 
 # searches start of string
 re.search('^From:', text)
@@ -301,6 +474,7 @@ textArray = [
 ]
 
 for text in textArray:
+
     # searches start of string for X, any character, repeated 0 or more times, and : - this matches lines 0,1,2,3
     re.search('^X.*:', text)
 
@@ -316,9 +490,7 @@ output = re.findall('[0-9]+', text) # returns ['2', '19', '42']
 text = 'From: Using the : character'
 
 output = re.findall('^F.+:', text) # returns ['From: Using the :']
-
 output = re.findall('^F.+?:', text) # returns ['From:'], adding the ? removes greedy matching
-
 
 # example - retrieving an email address
 re.findall('/S+@/S+', text)
@@ -330,7 +502,6 @@ text = 'From example@email.com'
 re.findall('^From (/S+@/S+)', text)
 
 # extract email domain from substring
-
 text = 'From stephen.marquard@uct.ac.za Sat Jan  5 09:14:16 2008'
 
 # find an @ sign, match non-blank character, one or more times. only extract these non-blank characters
@@ -339,8 +510,62 @@ output = re.findall('@([^ ]*)', text)
 # more precise version of above
 output = re.findall('^From .*@([^ ]*)', text)
 
+```
+
+## Projects
+
+### Project Requirements
+
+requirements.txt is used to flag the library requirements in order to run the app.
+
+Assuming you are working in a virtual environment (meaning you only install the packages you need), this can be achieved by:
+
+```bash
+
+pip install pipreqs
+
+pipreqes /path/to/project
 
 ```
+
+When you already have a requirements.txt file, you can install by:
+
+```bash
+
+pip install -r requirements.txt
+
+```
+
+### Virtual Environments
+
+Since python is known for the large number of libraries, it is easy to clutter the system. In addition, code could work on your machine given a very specific version number of a library, but not work on other machines.
+
+In order to isolate our development environment from any external factors and avoid cluttering our machine we can use virtualenv
+
+```python
+
+pip isntall virtualenv
+
+# creates a virtual environment in the current directory
+virtualenv project_name
+
+# switches your python interpreter to read from virtualenv
+source project_name/bin/activate
+
+```
+
+Good practice when setting up multiple virtual environments is to split your directories as follows:
+
+- Projects
+  - proj_1
+  - proj_2
+- VirtualEnvs
+  - proj_1
+  - proj_2
+
+This ensures that we keep a consistent naming convention, knowing which is which, but also that we don't clutter the Project directory with virtualenv system files, especially if we intend to use GIT and don't want to ".gitignore" all the files.
+
+## Databases
 
 ### Sqlite
 
@@ -564,60 +789,58 @@ if __name__ == '__main__':
 
 ```
 
-### Beautiful Soup
+## Image Processing
 
-Beautiful soup is used for HTML scraping. It formats and does error handling and returns the HTML in a consumable format
+### CV2
 
 ```python
 
-import requests
-from bs4 improt BeuatifulSoup
+import cv2
 
-page = requests.get('https://something.somethingelse.com')
+# converts image to grayscale
+image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-soup = BeautifulSoup(page.content, 'html.parser')
+# applies Gaussian Blur
+image = cv2.GaussianBlur(img, (9, 9), 0)
 
-# prints the HTML page with indents
-print(soup.prettify())
+# reverses colors on existing image
+image = cv2.bitwise_not(image, image)
 
-# prints ['html', 'n', <html> <head> <title>A simple example page</title> </head> <body> <p>Here is some simple content for this page.</p> </body> </html>]
-list(soup.children)
+# find contours
+contours = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# [bs4.element.Doctype, bs4.element.NavigableString, bs4.element.Tag]
-newList = [type(item) for item in list(soup.children)]
+# get rotation necessary from corner array and dimension array
+grid = cv2.getPErspectiveTransform(corners, dimensions)
 
-# from the top we infer that all the tags are in the second element of the list
-html = list(soup.children)[2]
+# rotate image based on grid
+warped = cv2.warpPerspective(image, grid, (width, height))
 
-# ['n', <head> <title>A simple example page</title> </head>, 'n', <body> <p>Here is some simple content for this page.</p> </body>, 'n']
-list(html.children)
+# resize an image to 2000 x 2000 pixels
+image_large = cv2.resize(image, (2000, 2000))
 
-# grab the body
-body = list(html.children)[3]
+# write image to filesystem
+cv2.imwrite('location/on/filesystem/filename.img', image)
 
-# grab the p tags within body - ['n', <p>Here is some simple content for this page.</p>, 'n']
-list(body.children)
+# read image from filesystem
+cv2.imread('location/on/filesystem/filename.img')
 
-# isolate p tag
-p = list(body.children)[1]
+```
 
-# returns 'Here is some simple content for this page.'
-p.get_text()
+### Pytesseract
 
+```python
 
-# find all instances of a tag - we can loop through this list
-soup.find_all('p')
+import pytesseract
 
-# returns first instance of p
-soup.find('p')
+# configuration parameters
+xconfigs = '--psm 6 digits -c page_separator='''
+# there are various psm modes, used to better identify different content types. 6 is good for single numbers
+# page separator null means we will not get a symbol at the end of the string
 
-# find all elements in p with outer-text class
-soup.find_all('p', class_='outer-text')
+# switch to --psm 8 digits to better read strings
 
-# can search by id 
-soup.find_all(id="first")
-
-
+# simple use for image recognition
+string = pytesseract.image_to_string(imageLocationOnDisk, config = xconfig)
 
 
 ```
