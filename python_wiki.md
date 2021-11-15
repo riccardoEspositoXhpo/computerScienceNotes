@@ -409,6 +409,10 @@ soup.find_all('p', class_='outer-text')
 # can search by id 
 soup.find_all(id="first")
 
+# tags can be found by using the select method and CSS notation
+soup.select("div p") # find all p tags inside div tags
+
+
 ```
 
 ### Regular Expressions
@@ -842,5 +846,261 @@ xconfigs = '--psm 6 digits -c page_separator='''
 # simple use for image recognition
 string = pytesseract.image_to_string(imageLocationOnDisk, config = xconfig)
 
+
+```
+
+## Web Data Transfer
+
+### XML
+
+XML stands for eXtensible Markup Language. Before JSON, it was the standard for sending data across the internet.
+
+```xml
+
+<person>  <!-- start of tag -->
+
+  <name>Content of Tag</name> 
+
+  <phone type="emea"> <!-- this is an attribute -->
+
+     +1 734 303 4456
+
+   </phone>
+
+   <!-- self-closing tag -->
+   <email hide="yes" /> <!-- another attribute --> 
+
+</person> <!-- end of tag -->
+
+
+```
+
+The data transfer works from a source dataset, which is *serialized*, then sent through and *deserialized*.
+
+```xml
+
+<!-- XML can be read as a path, as in a directory -->
+
+<a>
+  <b>X</b>
+  <c>
+    <d>Y</d>
+    <e>Z</e>
+  </c>
+</a>  
+
+<!--
+    
+    a/b
+    a/c/d
+    a/c/e
+    
+>
+
+```
+
+An XML Schema is a specification for how an XML should be built. You typically send an XML schema and a document to a validator and it will tell you if it is valid.
+
+```xml
+
+<!-- schema -->
+<xs:complexType name=”person”>
+
+  <xs:sequence>
+
+    <xs:element name="lastname" type="xs:string"/>
+
+    <xs:element name="age" type="xs:integer"/>
+
+    <xs:element name="dateborn" type="xs:date"/>
+
+   </xs:sequence>
+
+</xs:complexType>
+
+<!-- document -->
+<person>
+
+   <lastname>Severance</lastname>
+
+   <age>17</age>
+
+   <dateborn>2001-04-17</dateborn>
+
+</person>
+
+<!-- XSD is one of the more popular XML schema formats -->
+
+<!-- XSD sample constraints -->
+<xs:element name="person">
+
+  <xs:complexType>
+
+    <xs:sequence>
+
+      <xs:element name="full_name" type="xs:string"  
+
+          minOccurs="1" maxOccurs="1" /> <!-- there can only be one -->
+
+      <xs:element name="child_name" type="xs:string" 
+
+            minOccurs="0" maxOccurs="10" /> <!-- any number from 0 to 10 -->
+
+    </xs:sequence>
+
+  </xs:complexType>
+
+</xs:element>
+
+<!-- XSD datatypes -->
+<xs:element name="customer" type="xs:string"/>
+
+<xs:element name="start" type="xs:date"/>
+
+<xs:element name="startdate" type="xs:dateTime"/>
+
+<xs:element name="prize" type="xs:decimal"/>
+
+<xs:element name="weeks" type="xs:integer"/>
+
+
+```
+
+How to read XML from Python:
+
+```python
+
+import xml.etree.ElementTree as ET
+
+input = '''<stuff>
+
+    <users>
+
+        <user x="2">
+
+            <id>001</id>
+
+            <name>Chuck</name>
+
+        </user>
+
+        <user x="7">
+
+            <id>009</id>
+
+            <name>Brent</name>
+
+        </user>
+
+    </users>
+
+</stuff>'''
+
+
+
+stuff = ET.fromstring(input)
+
+lst = stuff.findall('users/user')
+
+print('User count:', len(lst))
+
+for item in lst:
+
+    print('Name', item.find('name').text)
+
+    print('Id', item.find('id').text)
+
+    print('Attribute', item.get("x"))
+
+
+```
+
+### JSON
+
+JSON stands for JavaScript Object Notation. It is perhaps the most common way to format and share data across the internet.
+
+JSON looks like a python dictionary, or a javascript object. Almost any language uses this format in some way or another.
+
+```python
+
+import json
+
+input = '''[
+
+  { "id" : "001",
+    "x" : "2",
+    "name" : "Chuck"
+  },
+  { "id" : "009",
+    "x" : "7",
+    "name" : "Chuck"
+  }
+]'''
+
+
+info = json.loads(input)
+
+print('User count:', len(info))
+
+for item in info:
+
+    print('Name', item['name'])
+    print('Id', item['id'])
+    print('Attribute', item['x'])
+
+
+```
+
+Using JSON to communicate is quite common in today's service-oriented world, where we leverage multiple APIs (Application Program Interfaces).
+
+### APIs
+
+Application Program Interfaces are ways in which clients can communicate to servers, typically by sending a piece of code, and receive a response in terms of data.
+
+API Status Codes:
+
+- 200: OK
+- 301: Redirected
+- 400: Bad Request
+- 401: Not Authenticated
+- 403: Forbidden
+- 404: Not Found
+- 503: Server cannot handle
+
+How to call APIs in Python.
+
+```python
+
+import requests
+import json
+
+response = requests.get("https://api.open-notify.org/this-api-doesnt-exist")
+
+
+print(response.status_code)
+print(response.json())
+
+obj = response.json()
+
+# prints out the JSON as a string of text, sorted keys and indentation of 4 spaces
+text = json.dumps(obj, sort_keys = True, indent = 4)
+
+# loads the json into a python dictionary
+dictionary = json.loads(obj)
+
+```
+
+APIs have "endpoints", which are links that we can "GET". To properly format an API request, we must read the documentation.
+
+```python
+
+# send API request with parameters
+
+parameters = {
+    "one": 40.71,
+    "two": -74
+}
+
+response = requests.get('https://api-endpoint.com', params = parameters)
 
 ```
