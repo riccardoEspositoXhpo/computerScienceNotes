@@ -355,6 +355,9 @@ new_string = string.replace("hello", "hello guys")
 if string.endswith("you"):
     # this is True
 
+string = 'Hey, how are you?'
+
+string.split(',') # default is to split by space
 
 
 ```
@@ -515,6 +518,141 @@ output = re.findall('@([^ ]*)', text)
 output = re.findall('^From .*@([^ ]*)', text)
 
 ```
+
+### Classes
+
+Classes in python, and other programming languages, are blueprints. Python is an object-oriented programming language, meaning that even the most primitive data types we use are actually classes.
+
+When you initialize a list, for example:
+
+```python
+
+my_list = [1, 2, 3]
+
+# this is a "list" class
+type(my_list)
+
+# this will enumerate all the "methods" associated to this class
+dict(my_list)
+```
+
+Some important concepts are as follows:
+
+- Classes are blueprints for "types" of data - a list, a string, a dictionary
+- an Object is an "instance" of a class. my_list is an instance of a List class
+- Classes have properties, and a list of functions associated with them. These are called "methods"
+
+```python
+
+# class example - create a Person data type
+
+class Person:
+    "This is the document string"
+
+    # some class attribute
+    age = 10
+
+    # method - self is some "anticipatory" concept, it contains the name of the future object of this class
+    def greet(self):
+        print("Hello")
+
+# prints 10
+print(Person.age)
+
+# Prints "This is the document string"
+print(Person.__doc__)
+
+# create an object of this class
+Beily = Person()
+
+# prints "Hello"
+print(Beily.greet())
+
+```
+
+Classes are commonly defined with an __init__ method - a block of code that executes whenever you create an instance.
+
+```python
+
+class ComplexNumber:
+    def __init__(self, r=0, i=0):
+        self.real = r
+        self.imag = i
+
+    def get_data(self):
+        print(f'{self.real}+{self.imag}j')
+
+
+# Create a new ComplexNumber object
+num1 = ComplexNumber(2, 3)
+
+# Call get_data() method
+# Output: 2+3j
+num1.get_data()
+
+# Create another ComplexNumber object
+# and create a new attribute 'attr'
+num2 = ComplexNumber(5)
+num2.attr = 10
+
+# Output: (5, 0, 10)
+print((num2.real, num2.imag, num2.attr))
+
+# but c1 object doesn't have attribute 'attr'
+# AttributeError: 'ComplexNumber' object has no attribute 'attr'
+print(num1.attr)
+
+# delete an attribute
+del num1.attr
+
+# this won't work anymore
+print(num1.attr)
+
+# delete an object
+del num1
+
+```  
+
+One way to scalably create classes is to re-use a previous class as a template. This is called inheritance.
+
+
+```python
+
+# this describes a polygon, object with 3 or more sides
+class Polygon:
+    def __init__(self, no_of_sides):
+        self.n = no_of_sides
+        # defines empty list with length number of sides
+        self.sides = [0 for i in range(no_of_sides)]
+
+    # this method asks us to fill the sides
+    def inputSides(self):
+        self.sides = [float(input("Enter side "+str(i+1)+" : ")) for i in range(self.n)]
+
+    # this method displays the sides 
+    def dispSides(self):
+        for i in range(self.n):
+            print("Side",i+1,"is",self.sides[i])
+
+
+# if I want to define a triangle, I can re-use the properties of Polygon
+
+class Triangle(Polygon):
+    def __init__(self):
+        # define a Triangle as a Polygon with 3 sides
+        Polygon.__init__(self,3)
+
+    def findArea(self):
+        a, b, c = self.sides
+        # calculate the semi-perimeter
+        s = (a + b + c) / 2
+        # just trust me this is the formula
+        area = (s * (s - a) * (s - b) * (s - c)) ** 0.5
+        print("The area of the triangle is ", area)
+
+```
+
+Please note that the Triangle Class and the Polygon Class both have an __init__ method. When calling the triangle class, its __init__ takes precedence.
 
 ## Projects
 
