@@ -35,12 +35,14 @@
 ## Structure and Interpretation of Computer Programs - TODO
 
 - Format:
-  - Youtube Playlist: John Denero?
+  - Youtube Playlist: John Denero
   - <https://cs61a.org/>
 
 - Topics Learned:
+  - stuff
 
 - Programming Tools:
+  - Python
 
 ## Next Courses List
 
@@ -49,5 +51,6 @@
 - <https://www.coursera.org/learn/algorithms-part1>
 - <https://www.coursera.org/learn/algorithms-part2>
 - C for everybody (continuation of PY4E)
+- CS50 intro to machine learnings
 - Ossu Computer Science Degree - Continue
   

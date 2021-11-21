@@ -148,6 +148,16 @@ if __name__ == '__main__'
 
 ```
 
+Functions can also take default values.
+
+```python
+
+def sum_stuff(a, b, c = 5):
+
+    return (a + b + c)
+
+```
+
 ### Print Function
 
 ```python
@@ -192,6 +202,8 @@ with open("file.csv","a") as file:
 
 ### Lambda Function
 
+A lambda function is a nameless function that is used to create a function with very few keystrokes. It accepts inputs and returns outputs.
+
 ```python
 
 titles = new Dict()
@@ -201,7 +213,17 @@ titles = new Dict()
 # in this case we are sorting, in reverse order, based on the value and not the key of the dict
 sorted(title, key=lambda title: titles[title]), reverse = True)
 
+# another example of lambda
+squares = lambda x : x * x 
+
+# squares(3)
+# 9
+
+# the above can equivalently be called with
+# (lambda x : x * x)(3)
+
 ```
+
 
 ### List Comprehensions
 
@@ -615,7 +637,6 @@ del num1
 
 One way to scalably create classes is to re-use a previous class as a template. This is called inheritance.
 
-
 ```python
 
 # this describes a polygon, object with 3 or more sides
@@ -653,6 +674,291 @@ class Triangle(Polygon):
 ```
 
 Please note that the Triangle Class and the Polygon Class both have an __init__ method. When calling the triangle class, its __init__ takes precedence.
+
+### Docstring and Assert
+
+Python programs can contain a small sample execution to test if the program is working as expected. 
+
+```python
+
+def sum_positive(x, y):
+    """ Sum x and y if both positive or return 0
+
+    >>> sum_positive(0,2):
+    2
+    >>> sum_positive(3,4):
+    7
+    >>> sum_positive(-1,2):
+    0
+    """"
+
+    if x > 0 and y > 0:
+        return x + y
+    
+    else:
+        return 0
+
+```
+
+In order to test the correctness of the function or display the test itself, we can run these commands
+
+```unix
+
+# in the terminal - run the doctest
+python -m doctest -v sum_positive.py
+
+# in a python shell - display the docstring
+help(sum_positive)
+
+# alternative doctests in shell
+from doctest import testmod, run_docstring_examples
+
+# tests everything within sum_positive.py
+testmod()
+
+# tests a single function - second argument always fixed, thirs is to "verbose"
+run_docstring_examples(sum_positive, globals(), True)
+
+```
+
+Some functions require a certain domain of inputs. When these are not provided, it is useful to make the call fail. An assert statement can help with this.
+
+```python
+
+def invert(x):
+
+    return 1 / x
+
+```
+
+Notice how this function would break if we provide an input of 0. A solution is to use an assert statements.
+
+```python
+
+def invert(x):
+
+    assert x != 0, 'Division by 0 breaks math.'
+
+    return 1 / x
+
+```
+
+In this case, when we call the function with an input of 0 it will nicely exit with a traceback, and print our message to the console.
+
+### Quine (Python)
+
+A Quine is a program that writes itself. Purely developed for fun, here are two quines I have come up with, depending on whether the code is in a stand-alone function or part of a string.
+
+```python
+
+# case 1 - quine.py
+quine = "print('quine = ' + repr(quine) + '; eval(quine)')"; eval(quine)
+
+"""
+    >>> python3 quine.py
+    quine = "print('quine = ' + repr(quine) + '; eval(quine)')"; eval(quine)
+"""
+# case 2 - just the string is executed
+
+quine = 'repr(print(eval(\'quine\'),end=\'\'))'
+
+
+""" 
+    >>> exec(quine)
+    repr(print(eval('quine'),end=''))
+
+```
+
+### Short Circuit
+
+Logical operators can be used in a neat way - because Python does not evaluate expressions unnecessarily. This is a form of control.
+
+As an example, if I have:
+
+```python
+
+# The first value is False, the second value is never evaluated
+>>> (1 + 1 == 3) and (2 + 5 == 7)
+
+# The first value is True, the second value is never evaluated
+>>> (1 + 1 == 2) and (1 + 5 == 50)
+
+```
+
+When is this useful? If we have operations that are not allowed, we can add a logical operator as a safety check. For example, if we divide by 0 or if we calculate the sqrt() of a negative number.
+
+Short-circuit also exists in conditional expressions:
+
+```python
+
+>>> x = 0
+>>> abs(1/x if x != 0 else 0)
+
+# The above will print 0 instead of crashing, because it never evaluates 1/x
+```
+
+### Higher Order Functions
+
+A powerful means of abstration is when we use a function to manipulate other functions.
+
+One common usecase is if we have to repeat a slightly similar operation more than once. For example, let's assume we need to sum some squares and also sum some cubes - this is an opportunity for abstraction.
+
+```python
+
+# general function - performs a sum by calling the function term
+def summation(n, term):
+    total, k = 0, 1
+    while k <= n:
+        total, k = total + term(k), k + 1
+    return total
+
+# define a cube
+def cube(x):
+    return x*x*x
+
+# define a square
+def square(x):
+    return x*x
+
+# summing a cube n times, means calling summation and saying that the term should be a cube
+def sum_cubes(n):
+    return summation(n, cube)
+
+# same example as above
+def sum_squares(n):
+    return summation(n, square)
+
+result_cubes = sum_cubes(3)
+result_squares = sum_squares(3)
+
+```
+
+Sometimes we define a generic function that performs an activity, but it may require more inputs than we can provide. By nesting functions within functions we can attempt to solve this - warning, this is mind-bending.
+
+```python
+
+
+def average(x, y):
+    return (x + y)/2
+
+"""This is our generic function. It starts from 1 and tries to guess what we are looking for.
+
+It calls a close function to see if the guess is correct, in our case the difference is less than 1e-3.
+While that is false, it updates the guess according to some method we specify.
+
+Here lies the problem. Our generic update(guess) can only update the guess based on the guess parameter, it does not take two inputs.
+
+We solve this with nested functions, aka Closures.
+
+"""
+def improve(update, close, guess=1):
+    while not close(guess):
+        guess = update(guess)
+    return guess
+
+def approx_eq(x, y, tolerance=1e-3):
+    return abs(x - y) < tolerance
+
+def sqrt(a):
+
+    # the update function for a square root requires the current guess but also the actual square root 
+    def sqrt_update(x):
+        return average(x, a/x)
+
+    # same goes for the close function
+    def sqrt_close(x):
+        return approx_eq(x * x, a)
+    
+    # we can call improve from within the function. Improve will exit first looking for close(guess). 
+    # However, close(guess) is defined as sqrt_update(x) which actually passes two parameters to average.
+    # Notice how by defining all of this within sqrt(a), you have also access to a in the local frame
+    return improve(sqrt_update, sqrt_close)
+
+result = sqrt(256)
+
+```
+
+To clarify the example, let's see what would happen if we do not nest functions.
+
+```python
+
+def average(x, y):
+    return (x + y)/2
+
+def improve(update, close, guess=1):
+    while not close(guess):
+        guess = update(guess)
+    return guess
+
+def approx_eq(x, y, tolerance=1e-3):
+    return abs(x - y) < tolerance
+
+
+# what is a?
+def sqrt_update(x):
+    return average(x, a/x)
+def sqrt_close(x):
+    return approx_eq(x * x, a)
+
+# Here lies the problem. How can I call the improve function... if I don't know what square root I'm looking for..?
+# Ok, I could globally define a = 256, but that is a poor way to calculate a square root.
+# Much better to have it defined like above, where I can pass whatever-a I want to it.
+square_root = improve(sqrt_update, sqrt_close)
+
+```
+
+As a last sub-topic, decorators are a way to run higher-order functions in short-hand notation. A common use-case for this is a trace.
+
+```python
+
+def trace(x):
+    def wrapped(x):
+        print('-> ', fn, '(', x, ')')
+        return fn(x)
+    return wrapped
+
+@trace
+def triple(x):
+    return 3 * x 
+
+# the above is equivalent to saying:
+triple = trace(triple)
+
+```
+
+The output of running in the python shell:
+
+```unix
+
+>>> triple(12)
+->  <function triple at 0x102a39848> ( 12 )
+36
+
+```
+
+Another common use-case for decorators is to enhance a function.
+
+```python
+
+# avoids division by 0
+def smart_divide(func):
+    def inner(a, b):
+        print("I am going to divide", a, "and", b)
+        if b == 0:
+            print("Whoops! cannot divide")
+            return
+
+        return func(a, b)
+    return inner
+
+
+@smart_divide
+def divide(a, b):
+    print(a/b)
+
+# the above divide function is enhanced with the smart_divie logic. But you can still call divide(5, 0)
+
+```
 
 ## Projects
 
