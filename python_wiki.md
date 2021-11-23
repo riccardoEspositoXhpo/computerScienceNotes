@@ -224,7 +224,6 @@ squares = lambda x : x * x
 
 ```
 
-
 ### List Comprehensions
 
 Time and Space efficient ways to create lists in python
@@ -677,7 +676,7 @@ Please note that the Triangle Class and the Polygon Class both have an __init__ 
 
 ### Docstring and Assert
 
-Python programs can contain a small sample execution to test if the program is working as expected. 
+Python programs can contain a small sample execution to test if the program is working as expected.
 
 ```python
 
@@ -801,6 +800,8 @@ Short-circuit also exists in conditional expressions:
 
 A powerful means of abstration is when we use a function to manipulate other functions.
 
+#### Abstraction
+
 One common usecase is if we have to repeat a slightly similar operation more than once. For example, let's assume we need to sum some squares and also sum some cubes - this is an opportunity for abstraction.
 
 ```python
@@ -832,6 +833,8 @@ result_cubes = sum_cubes(3)
 result_squares = sum_squares(3)
 
 ```
+
+#### Nested Functions
 
 Sometimes we define a generic function that performs an activity, but it may require more inputs than we can provide. By nesting functions within functions we can attempt to solve this - warning, this is mind-bending.
 
@@ -907,7 +910,9 @@ square_root = improve(sqrt_update, sqrt_close)
 
 ```
 
-As a last sub-topic, decorators are a way to run higher-order functions in short-hand notation. A common use-case for this is a trace.
+#### Decorators
+
+Decorators are a way to run higher-order functions in short-hand notation. A common use-case for this is a trace.
 
 ```python
 
@@ -957,6 +962,108 @@ def divide(a, b):
     print(a/b)
 
 # the above divide function is enhanced with the smart_divie logic. But you can still call divide(5, 0)
+
+```
+
+#### Dynamic Function Behavior
+
+Another benefit of higher-order functions becomes apparent when we would like to always call the same function but have it's behavior change over time. We can code this as a function that returns itself.
+
+```python
+
+# self-returning function - keeps track of what you have done before
+def higher_lower(i, j):
+
+    def say(i, j):
+        
+        if i > j:
+            print(f'{i} is greater than {j}')
+
+        if i < j:
+            print(f'{i} is smaller than {j}')
+
+        else:
+            print('The two numbers are equal')
+    
+    return say
+
+
+```
+
+Running the following in the python shell will lead to two different results!
+
+```python
+
+>>> case1 = higher_lower(1,2)
+>>> case1(1,2)
+1 is smaller than 2
+>>> case2 = higher_lower(2,1)
+>>> case2(2,1)
+2 is greater than 1 
+```
+
+Let us look at another example.
+
+```python
+
+def announce_lead_changes(last_leader=None):
+    """Return a commentary function that announces lead changes.
+
+    >>> f0 = announce_lead_changes()
+    >>> f1 = f0(5, 0)
+    Player 0 takes the lead by 5
+    >>> f2 = f1(5, 12)
+    Player 1 takes the lead by 7
+    >>> f3 = f2(8, 12)
+    >>> f4 = f3(8, 13)
+    >>> f5 = f4(15, 13)
+    Player 0 takes the lead by 2
+    """
+
+    def say(score0, score1):
+        if score0 > score1:
+            leader = 0
+        elif score1 > score0:
+            leader = 1
+        else:
+            leader = None
+        if leader != None and leader != last_leader:
+            print('Player', leader, 'takes the lead by', abs(score0 - score1))
+        return announce_lead_changes(leader)
+    return say
+
+```
+
+In this example we define announce_lead_change, which itself defines and also returns a different function.
+
+```python
+
+# when we first call the function, the last_leader=None and f0 now stores the say function
+>>> f0 = announce_lead_changes()
+
+# I call the say function, last_leader=None but leader=0, so it prints the output.
+# At the same time, it redefines annouce_lead_changes with last_leader=0, which in turn returns say again.
+>>> f1 = f0(5, 0)
+Player 0 takes the lead by 5
+
+# this is how you can dynamically change a function behavior based on past behavior
+
+
+```
+
+### Dynamic Variable Names
+
+If we need to construct dynamic variable names, we can leverage the following.
+
+```python
+
+player0 = 5
+player1 = 10
+# assume you want to find a list of players
+for i in range(2):
+
+    # this will return player0, and then player1 
+    eval('player' + i)
 
 ```
 
