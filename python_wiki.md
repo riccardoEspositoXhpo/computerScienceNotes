@@ -1067,6 +1067,10 @@ for i in range(2):
 
 ```
 
+### Recursion
+
+A recursive function is a function that calls itself. TBD.
+
 ## Projects
 
 ### Project Requirements
@@ -1400,7 +1404,7 @@ string = pytesseract.image_to_string(imageLocationOnDisk, config = xconfig)
 
 ```
 
-## Web Data Transfer
+## File Formats
 
 ### XML
 
@@ -1655,3 +1659,7 @@ parameters = {
 response = requests.get('https://api-endpoint.com', params = parameters)
 
 ```
+
+### Yaml
+
+TBD
