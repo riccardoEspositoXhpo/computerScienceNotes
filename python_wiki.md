@@ -1069,7 +1069,234 @@ for i in range(2):
 
 ### Recursion
 
-A recursive function is a function that calls itself. TBD.
+A recursive function is a function that calls itself. There are many ways to think about recursion, here I will outline the method that works best for me.
+
+A problem can be handled by recursion if it is possible to break down the problem in smaller pieces, until we arrive at a very simple case that we can check for.
+- Base Case: This is the smallest sub problem which we can check for
+- Recursive Case: This is the actual recursion, the act of breaking down the problem in smaller pieces
+- Condition: A check to see if the base case has occurred
+
+Let us consider an example.
+
+```python
+
+# One problem that can be handled with recursion is the sum of integers from 1 to n.
+# The nice thing about recursion is that you don't need to know how to solve the whole problem, just a very small part of it
+def sum_ints_recursion(n):
+
+    # step 2 - how to construct the base case? Even if we don't know how to sum integers, we definitely know that the
+    # sum of 1 is just 1. We construct the base case like this.
+    if n == 1:
+        return n # you can also return 1 it is the same
+    
+    # step 3 - now we have a base case of 1, we just need to make sure our recursive case "gets us to 1 at some point"
+    else:
+        # step 1 - how do I sum the numbers from 1 to n? Well, I can break the problem up by saying
+        # sum of 1 to n --> n + sum(1 to (n - 1))
+        # How to validate recursion - "leap of faith". Assume sum_ints_recursion(n - 1) is CORRECT, do you get the right answer?
+        # n + sum(1 to (n - 1)) = sum of 1 to n. Yes. 
+        return n + sum_ints_recursion(n - 1)
+
+sum_ints_recursion(3): # -> returns n + sum_ints_recursion(2)
+# sum_ints_recursion(2) -> returns n + sum_ints recursion(1)
+# sum_ints_recursion(1) -> base case = 1
+
+```
+
+The best way to understand recursion is to actually draw it out. By doing so we will see that recursion is like peeling and unpeeling an onion - you start from a function call, climb all the way down to the most nested case, find the base case, and then start rapidly returning functions until you are back to your original call.
+
+Visualizing the example above, we have the following:
+
+```python
+
+    sum_ints_recursion(3) 
+    _______|_______
+    |             |
+    n = 3  + sum_ints_recursion(2)
+                _______|_______
+                |             |
+                n = 2  + sum_ints_recursion(1)
+                                |
+                            Base Case -> n = 1
+
+# Step 0: Call f(3)
+    # Step 1: Call f(2)
+        # Step 2: Call f(1)
+            # Step 3: Base case, f(1) is 1
+        # Step 4: Return f(1) = 1
+    # Step 5: Return f(2) = 2 + f(1) = 2 + 1 = 3
+# Step 6: Return f(3) = 3 + f(2) = 3 + 3 = 6
+
+
+```
+
+Recursion is so hard to understand because it effectively evaluates your problem in reverse. The function calls stop when we hit a base case, so we are not really "summing up the numbers from 1 to n", we are "summing up the numbers from n to 1".
+
+We are not evaluating 1 + 2 + 3 + 4 + 5, but we are evaluating 5 + 4 + 3 + 2 + 1.
+
+This is fine for many recursive functions, but what if we need to "sum the numbers from 1 to n, but ignore any number higher than 3"?
+
+Our approach will not work, let us use the same implementation to prove why:
+
+```python
+
+# please let us ignore that we can set n = 3 and ignore all the rest - this is just an explanation
+def sum_upto_three_wrong(n):
+
+    # we change our base case to look for 3 and start returning
+    if n == 3:
+        return n
+    
+    else:
+
+        return n + sum_upto_three_wrong(n - 1)
+
+sum_upto_three_wrong(4) # what should the answer be? 1 + 2 + 3 = 6 (we stop at 3)
+
+# the problem is this is evaluated in reverse.
+# f(4) = 4 + f(3)
+# f(3) = 3! We hit the base case
+# f(4) = 4 + 3 = 7
+
+```
+
+In order to solve this, we must be able to traverse the numbers in the "correct order"- i.e. from 1 to n. How do we achieve this?
+We can leverage higher-order functions.
+
+```python
+
+def sum_upto_three(n):
+
+    def sum_in_ascending_order(n):
+         if n == 3:
+            return n
+    
+        else:
+
+            return n + sum_in_ascending_order(n + 1)
+
+    return sum_in_ascending_order(1)
+
+# sum_upto_three(4) returns a sum_in_ascending_order(1)
+# sum_in_ascending_order(1) --> 1 + sum_in_ascending_order(2)
+# sum_in_ascending_order(2) --> 2 + sum_in_ascending_order(3)
+# sum_in_ascending_order(3) --> 3
+# 3 + 2 + 1 = 6
+
+```
+
+Using helper, nested and higher-order functions is not only useful when you want to traverse in a specific order, but also when we require some additional variables to "keep track of", in addition to the arguments of the main function. Examples as follows:
+
+```python
+
+# Example 1
+def pingpong(n):
+    """Return the nth element of the ping-pong sequence.
+    The ping-pong sequence starts counting up from 1, and reverses the direction every time it finds an 8, multiple of 8, or number ending in 8.
+
+    >>> pingpong(8)
+    8
+    >>> pingpong(10)
+    6
+    >>> pingpong(15)
+    1
+    >>> pingpong(21)
+    -1
+    >>> pingpong(22)
+    -2
+    >>> pingpong(30)
+    -2
+    """
+
+    # step 2 - why do we need a helper? Because we need to keep track of the index, the current score, and the direction we are going
+    def helper(i, x, step):
+    
+        # when we are done counting we return the result
+        if i == n:
+            return x 
+        
+        # step 3 - every time we call the function, we increase the index, we either add or substract x, and the step itself.
+        # The counting occurs here when we do x + step / x + (- step)
+        return helper(i + 1, x + next_dir(step, i), next_dir(step, i))
+
+    # step 1 - we use nested functions because we initialize the helper with 1, we "seed it"    
+    return helper(1, 1, 1)
+
+
+# step 3.1 - we abstract the check for eights, assume the below works.
+def next_dir(step, i):
+
+    if i % 8 == 0 or num_eights(i) > 0:
+        return -step
+
+    return step
+
+def num_eights(i):
+    return number_of_eights
+
+
+
+# Example 2
+def count_coins(change):
+    """Return the number of ways to make change using coins of value of 1, 5, 10, 25.
+    >>> count_coins(15)
+    6
+    >>> count_coins(10)
+    4
+    >>> count_coins(20)
+    9
+    >>> count_coins(100) # How many ways to make change for a dollar?
+    242
+    """
+
+    def helper(change, coin):
+        
+        # step 3 - as we decrease the coins, at some point the change will be 0.
+        # how many times can you split 0 with 1? one time.
+        if change == 0:
+            return 1
+        
+        # step 4 - coin is None if we have called descending_coin(1), we have finished cycling coins.
+        # how many times can I split 5 with 0 ? well 0 times.
+        elif coin == None:
+            return 0
+
+        else:
+
+            if coin > change:
+                coin = descending_coin(coin)
+            
+            # step 2 - we build a tree. Assume n = 30 for the example. 
+            # How do we count the number of times to split 30 with all coins up to 25?
+            # in one scenario, we assume we use 25, and ask - how we count the times to split 5 with all coins up to 25
+            # in the other, we do not use 25, and as - how do we count the times to split 30 with coins up to 10
+            with_largest = helper(change - coin, coin)
+            without_largest = helper(change, descending_coin(coin)) # descending coin gives 25 -> 10, 10 -> 5, ... 
+
+            return with_largest + without_largest
+
+    # step 1 - we seed the helper function by using a coin of 25, the largest
+    return helper(change, 25)
+
+def descending_coin(coin):
+    """Returns the next descending coin in order.
+    >>> descending_coin(25)
+    10
+    >>> descending_coin(10)
+    5
+    >>> descending_coin(5)
+    1
+    >>> descending_coin(2) # Other values return None
+    """
+    if coin == 25:
+        return 10
+    elif coin == 10:
+        return 5
+    elif coin == 5:
+        return 1
+
+```
+
 
 ## Projects
 
