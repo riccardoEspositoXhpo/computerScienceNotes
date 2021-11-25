@@ -2098,6 +2098,7 @@ def rationals_are_equal(x, y):
 
 
 # Abstraction Level - Defining Rationals
+#----------------------------------------------------------#
 
 def rational(n, d):
     return [n, d]
@@ -2107,5 +2108,31 @@ def numer(x):
 
 def denom(x):
     return x[1]
+
+
+# Abstraction Level - Bonus - Defining Pairs
+#----------------------------------------------------------#
+
+
+# above we assume that there exists a concept of list such that [n, d] gives us the representation of rational.
+# it doesn't have to be this way. We can abstract even the lowest details.
+
+
+# a pair is just a function that, given x and y, can return either of those values.
+def pair(x, y):
+    """Return a function that represents a pair."""
+    def get(index):
+        if index == 0:
+            return x
+        elif index == 1:
+            return y
+    return get
+
+
+# the select function can then easily return pair(i), where i is either 0 or 1
+def select(p, i):
+    """Return the element at index i of pair p."""
+    return p(i)
+
 
 ```
