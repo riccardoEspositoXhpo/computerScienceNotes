@@ -256,6 +256,12 @@ newlist = [x if x != "banana" else "orange" for x in fruits]
 # n dimensional array of 0 
 array = [0 for i in range(n)] for i in range(n)
 
+# combining lists into other lists
+s = [1, 2, 3]
+t = [4, 5, 6]
+
+new = [[s[i], t[i]] for i in range(0, len(s))]
+
 
 ```
 
@@ -1072,9 +1078,12 @@ for i in range(2):
 A recursive function is a function that calls itself. There are many ways to think about recursion, here I will outline the method that works best for me.
 
 A problem can be handled by recursion if it is possible to break down the problem in smaller pieces, until we arrive at a very simple case that we can check for.
+
 - Base Case: This is the smallest sub problem which we can check for
 - Recursive Case: This is the actual recursion, the act of breaking down the problem in smaller pieces
 - Condition: A check to see if the base case has occurred
+
+#### Standard Recursion
 
 Let us consider an example.
 
@@ -1129,6 +1138,8 @@ Visualizing the example above, we have the following:
 
 
 ```
+
+#### Recursion with Higher Order Functions
 
 Recursion is so hard to understand because it effectively evaluates your problem in reverse. The function calls stop when we hit a base case, so we are not really "summing up the numbers from 1 to n", we are "summing up the numbers from n to 1".
 
@@ -1185,11 +1196,11 @@ def sum_upto_three(n):
 
 ```
 
-Using helper, nested and higher-order functions is not only useful when you want to traverse in a specific order, but also when we require some additional variables to "keep track of", in addition to the arguments of the main function. Examples as follows:
+Using helper, nested and higher-order functions is not only useful when you want to traverse in a specific order, but also when we require some additional variables to "keep track of", in addition to the arguments of the main function.
+Another more involved example of this type of recursion is the pingpong algorithm.
 
 ```python
 
-# Example 1
 def pingpong(n):
     """Return the nth element of the ping-pong sequence.
     The ping-pong sequence starts counting up from 1, and reverses the direction every time it finds an 8, multiple of 8, or number ending in 8.
@@ -1234,9 +1245,48 @@ def next_dir(step, i):
 def num_eights(i):
     return number_of_eights
 
+```
+
+#### Mutual Recursion
+
+Mutual recursion occurs when two functions call each other recursively. There is nothing different compared to this type of recursion, just that we are using two functions. The base case can either live in both functions, or only one.
+
+```python
+
+# let's assume that we want to find out if a number is odd or even. Let's also ignore that n % 2 gives us that answer.
+# We can say that an odd number is the same as even plus one, and the same goes for even. Our base case is that 0 is even.
+
+# outer function asks if n is even
+def is_even(n):
+    
+    # base case
+    if n == 0:
+        return True
+    else:
+        # calls another function with lower input
+        return is_odd(n-1)
+
+    def is_odd(n):
+    
+    # base case also here
+    if n == 0:
+        return False
+    else:
+        # calls back the original function
+        return is_even(n-1)
+
+    # True
+    result = is_even(4)
+
+```
+
+#### Tree Recursion
+
+Tree recursion is a special type of recursion, which could involve either a simple case or a higher order function, in which we must evaluate two different options to reach our result. Each one of our options breaks down the problem further.
+
+```python
 
 
-# Example 2
 def count_coins(change):
     """Return the number of ways to make change using coins of value of 1, 5, 10, 25.
     >>> count_coins(15)
@@ -1278,6 +1328,7 @@ def count_coins(change):
     # step 1 - we seed the helper function by using a coin of 25, the largest
     return helper(change, 25)
 
+# simple function that returns the smaller coin compared to the one passed in
 def descending_coin(coin):
     """Returns the next descending coin in order.
     >>> descending_coin(25)
