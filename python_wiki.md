@@ -1993,4 +1993,119 @@ response = requests.get('https://api-endpoint.com', params = parameters)
 
 ### Yaml
 
-TBD
+YAML stands for "YAML Ain't MArkup Language" and is another popular data serialization file format. It is commonly used for configuration files. Below we explore various features of the language
+
+```yaml
+
+# three dashes indicate start of file - required
+---
+
+# key is always a string - value can be anything. String go without quotes
+hi: how are you
+
+# integer
+foo: 12345
+# hex
+bar: 0x12d4
+# octal
+plop: 023332
+# float
+foo: 1230.15
+# scientific
+bar:  12.3015e+05
+
+# infinity and NaNs
+foo: .inf
+bar: -.Inf
+plop: .NAN
+
+
+# can use double quotes for strings if we want newlines
+foo: "this is not a normal string\n"
+
+
+# nulls
+foo: ~
+bar: null
+
+# All possible boolean values
+foo: True
+bar: False
+light: On
+TV: Off
+good: Yes
+bad: No
+
+# containers
+items: [ 1, 2, 3, 4, 5 ]
+names: [ "one", "two", "three", "four" ]
+
+# can also be represented as follows
+items:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+
+# complex structures are supported
+items:
+  - things:
+      thing1: huey
+      things2: dewey
+      thing3: louie
+  - other things:
+      key: value
+
+
+```
+
+## Data Abstraction
+
+Just like we can use functions to abstract ideas, below we show a powerful method to build complex programs by manipulating data.
+When we implement a complex function, we can call auxilliary functions to perform our calculations and we do not need to know how these are implemented.
+
+In the same way, we can deal with complex data types (not the classes that are pre-defined in python) without knowing exactly how these are implemented. 
+
+This creates some barriers in our code, where we are programming at different levels. This is extremely helpful when maintaining and updating code.
+
+```python
+
+# the example chosen below is the one of rational numbers, or fractions. 
+
+# One layer of data abstraction is to define the concept of rational, numerator, denominator.
+# If we assume that these concepts exist, we can program operations with rationals without knowing their implementation details.
+
+
+# Abstraction Level - Operations with Rationals
+#----------------------------------------------------------#
+
+
+# these operations are valid irrespective of how the functions are implemneted. This also means I can change how rational is calculated, and it will not affect the below.
+def add_rationals(x, y):
+    nx, dx = numer(x), denom(x)
+    ny, dy = numer(y), denom(y)
+    return rational(nx * dy + ny * dx, dx * dy)
+
+def mul_rationals(x, y):
+    return rational(numer(x) * numer(y), denom(x) * denom(y))
+
+def print_rational(x):
+    print(numer(x), '/', denom(x))
+
+def rationals_are_equal(x, y):
+    return numer(x) * denom(y) == numer(y) * denom(x)
+
+
+# Abstraction Level - Defining Rationals
+
+def rational(n, d):
+    return [n, d]
+
+def numer(x):
+    return x[0]
+
+def denom(x):
+    return x[1]
+
+```
