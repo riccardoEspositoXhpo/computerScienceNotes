@@ -1,6 +1,6 @@
 # Python Wiki
 
-## General
+## Basics
 
 ### Code Basics
 
@@ -83,7 +83,84 @@ except FileNotFoundError:
 - dict - stores keys and values { "name" : "Beily", "number": 1}
 - set - collection of values without duplicates
 
-### Copying Data
+### Functions and main execution
+
+- For safety, as the codebase expands, you may want to explicitly call out which functions you want to run. Code could look something like this:
+
+```python
+
+def main():
+    barf(3)
+
+def barf(n):
+    for i in range(3):
+        print("barf")
+
+# this is one option to run only explicit functions
+main()
+
+# this works even if your file is not called "main.py"
+if __name__ == '__main__'
+
+    # please note the if condition remains the same, but the code block to be executed does not need to be "main"
+    main()
+
+```
+
+Functions can also take default values.
+
+```python
+
+def sum_stuff(a, b, c = 5):
+
+    return (a + b + c)
+
+```
+
+### Print Function
+
+```python
+
+# print automatically puts a newline at the end of the print, you can override
+print("hello", end = '') 
+
+```
+
+### User input
+
+```python
+
+from sys import argv
+
+if len(argv) == 2:
+    # do stuff
+    print(argv[1])
+
+```
+
+### Variable Scope
+
+```python
+
+number = 5
+
+def bad_scoping():
+
+    # this breaks because number is not initialized
+    number += 5 
+    print(number)
+
+def good_scoping():
+
+    # access a global variable
+    global number
+
+    number += 5
+    print(number)
+
+```
+
+## Copy and Deepcopy
 
 ```python
 
@@ -124,62 +201,7 @@ def main():
 
 ```
 
-### Functions and main execution
-
-- For safety, as the codebase expands, you may want to explicitly call out which functions you want to run. Code could look something like this:
-
-```python
-
-def main():
-    barf(3)
-
-def barf(n):
-    for i in range(3):
-        print("barf")
-
-# this is one option to run only explicit functions
-main()
-
-# assuming your file is called main.py and your function is main
-if __name__ == '__main__'
-
-    # please note the if condition remains the same, but the code block to be executed does not need to be "main"
-    main()
-
-```
-
-Functions can also take default values.
-
-```python
-
-def sum_stuff(a, b, c = 5):
-
-    return (a + b + c)
-
-```
-
-### Print Function
-
-```python
-
-# print automatically puts a newline at the end of the print, you can override
-print("hello", end = '') 
-
-```
-
-### User input
-
-```python
-
-from sys import argv
-
-if len(argv) == 2:
-    # do stuff
-    print(argv[1])
-
-```
-
-### Files
+## Files
 
 ```python
 
@@ -200,7 +222,7 @@ with open("file.csv","a") as file:
 
 ```
 
-### Lambda Function
+## Lambda Function
 
 A lambda function is a nameless function that is used to create a function with very few keystrokes. It accepts inputs and returns outputs.
 
@@ -223,6 +245,8 @@ squares = lambda x : x * x
 # (lambda x : x * x)(3)
 
 ```
+
+## Containers
 
 ### List Comprehensions
 
@@ -262,10 +286,73 @@ t = [4, 5, 6]
 
 new = [[s[i], t[i]] for i in range(0, len(s))]
 
+# manipulating existing lists with list comprehensions
+# this below is a way to perform a riffle shuffle on a list
+deck = range(20)
+
+riffled = [deck[i // 2] if i % 2 == 0 else deck[i//2 + len(deck)//2] for i in range(0, len(deck))] 
+
 
 ```
 
-### Loading Configuration Files
+### List Operations
+
+```python
+
+# list slicing means grabbing items from original list and returning them in a new list
+
+list1 = [1, 2, 3, 4]
+
+list2 = list1[:2] # grabs [1, 2, 3]
+list3 = list1[1:2] # grabs [2, 3]
+list4 = list1[1:] # grabs [2, 3, 4]
+
+# slicing notation works the same as ranges. In fact, it is equivalent to:
+list2 = [list1[i] for i in range(2)]
+
+```
+
+Below is a list of common functions that support lists.
+
+```python
+
+sum([1, 2, 3]) # 6
+max(range(10)) # 9
+
+min(range(10)) # 0
+# the all function returns a bool. It is True if all the values are true as well
+all(x < 5 for x in range(5)) # True
+all(x < 1 for x in range(5)) # False
+
+# the complement of all is any
+any(x < 1 for x in range(5)) # True because at least one is True
+
+
+
+```
+
+### String Operations
+
+```python
+
+# Strings are immutable, when you modify a string it typically returns a new string back
+string = "hello how are you"
+
+if "hello" in string:
+    # this is True
+
+new_string = string.replace("hello", "hello guys")
+
+if string.endswith("you"):
+    # this is True
+
+string = 'Hey, how are you?'
+
+string.split(',') # default is to split by space
+
+```
+
+## Loading Configuration Files
 
 ```python
 
@@ -298,7 +385,7 @@ VARIABLE_NAME = parsed_config['script_options']['VARIABLE_NAME']
 
 ```
 
-### Threading
+## Threading
 
 Threading enables you to run a python program and execute multiple scripts at the same time in "threads".
 
@@ -327,7 +414,7 @@ for module in MODULES:
 
 ```
 
-### Coloring Console Output
+## Coloring Console Output
 
 ```python
 
@@ -345,51 +432,7 @@ class txcolors:
 
 ```
 
-### Variable Scope
-
-```python
-
-number = 5
-
-def bad_scoping():
-
-    # this breaks because number is not initialized
-    number += 5 
-    print(number)
-
-def good_scoping():
-
-    # access a global variable
-    global number
-
-    number += 5
-    print(number)
-
-```
-
-### String Operations
-
-```python
-
-# Strings are immutable, when you modify a string it typically returns a new string back
-string = "hello how are you"
-
-if "hello" in string:
-    # this is True
-
-new_string = string.replace("hello", "hello guys")
-
-if string.endswith("you"):
-    # this is True
-
-string = 'Hey, how are you?'
-
-string.split(',') # default is to split by space
-
-
-```
-
-### Web Scraping - BeautifulSoup
+## Web Scraping - BeautifulSoup
 
 Beautiful soup is used for HTML scraping. It formats and does error handling and returns the HTML in a consumable format
 
@@ -445,7 +488,7 @@ soup.select("div p") # find all p tags inside div tags
 
 ```
 
-### Regular Expressions
+## Regular Expressions
 
 Also known as regexp or regex, they provide shortcuts to match strings of text.
 
@@ -546,7 +589,7 @@ output = re.findall('^From .*@([^ ]*)', text)
 
 ```
 
-### Classes
+## Classes
 
 Classes in python, and other programming languages, are blueprints. Python is an object-oriented programming language, meaning that even the most primitive data types we use are actually classes.
 
@@ -680,7 +723,7 @@ class Triangle(Polygon):
 
 Please note that the Triangle Class and the Polygon Class both have an __init__ method. When calling the triangle class, its __init__ takes precedence.
 
-### Docstring and Assert
+## Docstring and Assert
 
 Python programs can contain a small sample execution to test if the program is working as expected.
 
@@ -750,7 +793,7 @@ def invert(x):
 
 In this case, when we call the function with an input of 0 it will nicely exit with a traceback, and print our message to the console.
 
-### Quine (Python)
+## Quine (Python)
 
 A Quine is a program that writes itself. Purely developed for fun, here are two quines I have come up with, depending on whether the code is in a stand-alone function or part of a string.
 
@@ -774,7 +817,7 @@ quine = 'repr(print(eval(\'quine\'),end=\'\'))'
 
 ```
 
-### Short Circuit
+## Short Circuit
 
 Logical operators can be used in a neat way - because Python does not evaluate expressions unnecessarily. This is a form of control.
 
@@ -802,11 +845,11 @@ Short-circuit also exists in conditional expressions:
 # The above will print 0 instead of crashing, because it never evaluates 1/x
 ```
 
-### Higher Order Functions
+## Higher Order Functions
 
 A powerful means of abstration is when we use a function to manipulate other functions.
 
-#### Abstraction
+### Abstraction
 
 One common usecase is if we have to repeat a slightly similar operation more than once. For example, let's assume we need to sum some squares and also sum some cubes - this is an opportunity for abstraction.
 
@@ -840,7 +883,7 @@ result_squares = sum_squares(3)
 
 ```
 
-#### Nested Functions
+### Nested Functions
 
 Sometimes we define a generic function that performs an activity, but it may require more inputs than we can provide. By nesting functions within functions we can attempt to solve this - warning, this is mind-bending.
 
@@ -916,7 +959,7 @@ square_root = improve(sqrt_update, sqrt_close)
 
 ```
 
-#### Decorators
+### Decorators
 
 Decorators are a way to run higher-order functions in short-hand notation. A common use-case for this is a trace.
 
@@ -971,7 +1014,7 @@ def divide(a, b):
 
 ```
 
-#### Dynamic Function Behavior
+### Dynamic Function Behavior
 
 Another benefit of higher-order functions becomes apparent when we would like to always call the same function but have it's behavior change over time. We can code this as a function that returns itself.
 
@@ -1057,7 +1100,7 @@ Player 0 takes the lead by 5
 
 ```
 
-### Dynamic Variable Names
+## Dynamic Variable Names
 
 If we need to construct dynamic variable names, we can leverage the following.
 
@@ -1073,7 +1116,7 @@ for i in range(2):
 
 ```
 
-### Recursion
+## Recursion
 
 A recursive function is a function that calls itself. There are many ways to think about recursion, here I will outline the method that works best for me.
 
@@ -1083,7 +1126,7 @@ A problem can be handled by recursion if it is possible to break down the proble
 - Recursive Case: This is the actual recursion, the act of breaking down the problem in smaller pieces
 - Condition: A check to see if the base case has occurred
 
-#### Standard Recursion
+### Standard Recursion
 
 Let us consider an example.
 
@@ -1139,7 +1182,7 @@ Visualizing the example above, we have the following:
 
 ```
 
-#### Recursion with Higher Order Functions
+### Recursion with Higher Order Functions
 
 Recursion is so hard to understand because it effectively evaluates your problem in reverse. The function calls stop when we hit a base case, so we are not really "summing up the numbers from 1 to n", we are "summing up the numbers from n to 1".
 
@@ -1247,7 +1290,7 @@ def num_eights(i):
 
 ```
 
-#### Mutual Recursion
+### Mutual Recursion
 
 Mutual recursion occurs when two functions call each other recursively. There is nothing different compared to this type of recursion, just that we are using two functions. The base case can either live in both functions, or only one.
 
@@ -1280,7 +1323,7 @@ def is_even(n):
 
 ```
 
-#### Tree Recursion
+### Tree Recursion
 
 Tree recursion is a special type of recursion, which could involve either a simple case or a higher order function, in which we must evaluate two different options to reach our result. Each one of our options breaks down the problem further.
 
@@ -1348,6 +1391,16 @@ def descending_coin(coin):
 
 ```
 
+## Key Functions
+
+Certain functions such as sort, max, etc. have a default way of operating. However, this can typically be overridden by providing a key.
+
+```python
+
+# how do I find the highest value in a parabola of x?
+max(range(10), key = lambda x: 7 - (x - 4)*(x - 2)) # 3
+
+```
 
 ## Projects
 
