@@ -295,11 +295,14 @@ riffled = [deck[i // 2] if i % 2 == 0 else deck[i//2 + len(deck)//2] for i in ra
 
 ```
 
-### List Operations
+### List Slicing
 
 ```python
 
 # list slicing means grabbing items from original list and returning them in a new list
+
+
+# there are three arguments to list slicing [start=0:end=0:step=1]
 
 list1 = [1, 2, 3, 4]
 
@@ -309,6 +312,17 @@ list4 = list1[1:] # grabs [2, 3, 4]
 
 # slicing notation works the same as ranges. In fact, it is equivalent to:
 list2 = [list1[i] for i in range(2)]
+
+# How to grab the last element of a list
+lst = [0, 1, 2, 3, 4, 5, 6]
+lst[-1] # grabs the last element! 6
+lst[-2] # grabs the semi-last! 5
+
+
+[::-1]   # Make a reversed copy of the entire list
+[6, 5, 4, 3, 2, 1, 0]
+>>> lst[::2]  # Skip every other; step size defaults to 1 otherwise
+[0, 2, 4, 6]
 
 ```
 
@@ -331,11 +345,107 @@ any(x < 1 for x in range(5)) # True because at least one is True
 
 ```
 
+### List Operations
+
+```python
+
+"""" General
+- 'append': adds element to end of list
+- 'clear': removes all elements from list
+- 'copy': returns a copy of list
+- 'count': counts elements with certain value
+- 'extend': adds elements of a list (or iterable) to end of current list 
+- 'index': returns the index of element with certain value
+- 'insert': inserts element in specific position
+- 'pop': removes a specific element
+- 'remove': removes first element with certain value
+- 'reverse': inverts order of list
+- 'sort': re-orders the list according to key function
+
+"""
+
+# Detail
+
+# append(list)
+
+a = ["apple", "banana", "cherry"]
+b = ["Ford", "BMW", "Volvo"]
+a.append(b)
+
+
+# clear()
+
+fruits = ['apple', 'banana', 'cherry', 'orange']
+
+fruits.clear()
+
+
+# copy()
+
+fruits = ['apple', 'banana', 'cherry', 'orange']
+
+x = fruits.copy()
+
+
+# extend(iterable)
+
+fruits = ['apple', 'banana', 'cherry']
+
+points = (1, 4, 5, 9)
+
+fruits.extend(points)
+
+
+# index('item')
+
+fruits = ['apple', 'banana', 'cherry']
+
+x = fruits.index("cherry")
+
+
+# insert(where, what)
+fruits = ['apple', 'banana', 'cherry']
+
+fruits.insert(1, "orange")
+
+
+# pop(where)
+
+fruits = ['apple', 'banana', 'cherry']
+
+fruits.pop(1)
+
+
+# remove(what)
+
+fruits = ['apple', 'banana', 'cherry']
+
+fruits.remove("banana")
+
+
+# reverse()
+
+fruits.reverse()
+
+
+# sort()
+
+# A function that returns the length of the value:
+def myFunc(e):
+  return len(e)
+
+cars = ['Ford', 'Mitsubishi', 'BMW', 'VW']
+
+cars.sort(reverse=True,key=myFunc) # sorts from longest to shortest
+
+
+```
+
 ### String Operations
 
 ```python
 
-# Strings are immutable, when you modify a string it typically returns a new string back
+# Strings are immutable- when you modify a string it typically returns a new string back
 string = "hello how are you"
 
 if "hello" in string:
@@ -603,7 +713,7 @@ my_list = [1, 2, 3]
 type(my_list)
 
 # this will enumerate all the "methods" associated to this class
-dict(my_list)
+dir(my_list)
 ```
 
 Some important concepts are as follows:

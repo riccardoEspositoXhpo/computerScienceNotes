@@ -39,17 +39,19 @@
   - <https://cs61a.org/>
 
 - Topics Learned:
-  - stuff
+  - Environments, Abstraction, Control
+  - Data Structures
+  - Functions
 
 - Programming Tools:
   - Python
 
 ## Next Courses List
 
-- <https://joshhug.gitbooks.io/hug61b/content/>
 - <https://www.coursera.org/learn/cs-programming-java>
 - <https://www.coursera.org/learn/algorithms-part1>
 - <https://www.coursera.org/learn/algorithms-part2>
+- CS61B! Youtube Playlist
 - C for everybody (continuation of PY4E)
 - CS50 intro to machine learnings
 - Ossu Computer Science Degree - Continue
