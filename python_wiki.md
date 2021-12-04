@@ -107,13 +107,29 @@ if __name__ == '__main__'
 
 ```
 
-Functions can also take default values.
+Functions can also take default values for arguments.
 
 ```python
 
 def sum_stuff(a, b, c = 5):
 
     return (a + b + c)
+
+```
+
+### Variable Operations
+
+```python
+
+# swapping variables is easy
+a = 1
+b = 2
+
+a, b = b, a
+
+0 # False
+False # False
+
 
 ```
 
@@ -157,6 +173,22 @@ def good_scoping():
 
     number += 5
     print(number)
+
+```
+
+With higher-order functions we can use the "nonlocal" statement.
+
+```python
+
+def make_withdraw(balance):
+    """Return a withdraw function that draws down balance with each call."""
+    def withdraw(amount):
+        nonlocal balance                 # Declare the name "balance" nonlocal. It can reference to the balance above
+        if amount > balance:
+            return 'Insufficient funds'
+        balance = balance - amount       # Re-bind the existing balance name. Only work thanks to nonlocal statement
+        return balance
+    return withdraw
 
 ```
 
@@ -248,6 +280,11 @@ squares = lambda x : x * x
 
 ## Containers
 
+### Mutability
+
+- Lists, Dictionaries are mutable
+- Strings, Tuples are immutable
+
 ### List Comprehensions
 
 Time and Space efficient ways to create lists in python
@@ -293,9 +330,19 @@ deck = range(20)
 riffled = [deck[i // 2] if i % 2 == 0 else deck[i//2 + len(deck)//2] for i in range(0, len(deck))] 
 
 
+# two layer list comprehension - assume you want to subtract i from i - 1 in a list of lists. You can do it with list comprehension.
+# input  - [[75, 81, 84, 90, 92], [19, 29, 35, 36, 38]]
+# output - [[6, 3, 6, 2], [10, 6, 1, 2]]
+
+
+times = [[times_per_player[i][j] - times_per_player[i][j - 1] \
+         for j in range(1, len(times_per_player[i]))] \
+         for i in range(len(times_per_player))]
+
+
 ```
 
-### List Slicing
+### Slicing
 
 ```python
 
@@ -326,26 +373,9 @@ lst[-2] # grabs the semi-last! 5
 
 ```
 
-Below is a list of common functions that support lists.
+Slicing also works on strings.
 
-```python
-
-sum([1, 2, 3]) # 6
-max(range(10)) # 9
-
-min(range(10)) # 0
-# the all function returns a bool. It is True if all the values are true as well
-all(x < 5 for x in range(5)) # True
-all(x < 1 for x in range(5)) # False
-
-# the complement of all is any
-any(x < 1 for x in range(5)) # True because at least one is True
-
-
-
-```
-
-### List Operations
+### List Methods
 
 ```python
 
@@ -441,7 +471,26 @@ cars.sort(reverse=True,key=myFunc) # sorts from longest to shortest
 
 ```
 
-### String Operations
+Below is a list of other common functions that support lists.
+
+```python
+
+sum([1, 2, 3]) # 6
+max(range(10)) # 9
+
+min(range(10)) # 0
+# the all function returns a bool. It is True if all the values are true as well
+all(x < 5 for x in range(5)) # True
+all(x < 1 for x in range(5)) # False
+
+# the complement of all is any
+any(x < 1 for x in range(5)) # True because at least one is True
+
+
+
+```
+
+### String Methods
 
 ```python
 
@@ -532,6 +581,93 @@ s = ' hey how are you '
 
 s.lstrip() # 'hey how are you '
 s.rstrip() # ' hey how are you'
+
+
+
+```
+
+### Dictionaries
+
+Dictionaries represent key/value pairs. Only immutable datatypes can be used as keys (i.e a string, a tuple, ...)
+
+```python
+
+numerals = {
+    'I': 1,
+    'V': 5,
+    'X': 10
+}
+
+# you look-up by key
+numerals['X'] # 10
+
+# re-assign values
+numerals['X'] = 12
+
+list(numerals) # ['I', 'V', 'X']
+
+# returns a sequence that is iterable, but it is not a list
+numerals.values() # dict_values([1, 5, 10])
+
+# this returns a list
+list(numerals.values())
+
+
+# Add a key into a dictionary while using a loop, if it doesn't exist - shorthand
+
+dict[item] = dict.get(item, 0) + 1 # this will either retrieve the current count and increment it, or initialize it at 0 and set it to 1
+
+```
+
+### Dictionary Comprehension
+
+Work similarly to list comprehension, but the syntax must be adjusted.
+
+```python
+
+dict_comp = { x * x: x for x in [1, 2, 3, 4, 5] if x > 2}
+
+dict_comp # {9: 3, 16: 4, 25: 5}
+
+
+```
+
+### Dictionary Methods
+
+```python
+
+"""
+
+clear() - Removes all the elements from the dictionary
+copy() - Returns a copy of the dictionary
+fromkeys() - Returns a dictionary with the specified keys and value
+get() - Returns the value of the specified key
+items() - Returns a list containing a tuple for each key value pair
+keys() - Returns a list containing the dictionary's keys
+pop() - Removes the element with the specified key
+popitem() - Removes the last inserted key-value pair
+setdefault() - Returns the value of the specified key. If the key does not exist: insert the key, with the specified value
+update() - Updates the dictionary with the specified key-value pairs
+values() - Returns a list of all the values in the dictionary
+
+"""
+
+
+```
+
+### Tuples
+
+Tuples are an immutable data type in python.
+
+```python
+
+tup = (10, 20)
+
+# empty typle
+empty = ()
+
+# one element - weird syntax
+one = (10, )
 
 
 
@@ -774,7 +910,9 @@ output = re.findall('^From .*@([^ ]*)', text)
 
 ```
 
-## Classes
+## Objects
+
+### Classes Introduction
 
 Classes in python, and other programming languages, are blueprints. Python is an object-oriented programming language, meaning that even the most primitive data types we use are actually classes.
 
@@ -868,6 +1006,8 @@ del num1
 
 ```  
 
+### Inheritance
+
 One way to scalably create classes is to re-use a previous class as a template. This is called inheritance.
 
 ```python
@@ -881,7 +1021,7 @@ class Polygon:
 
     # this method asks us to fill the sides
     def inputSides(self):
-        self.sides = [float(input("Enter side "+str(i+1)+" : ")) for i in range(self.n)]
+        self.sides = [float(input("Enter side " + str(i+1)+" : ")) for i in range(self.n)]
 
     # this method displays the sides 
     def dispSides(self):
@@ -907,6 +1047,249 @@ class Triangle(Polygon):
 ```
 
 Please note that the Triangle Class and the Polygon Class both have an __init__ method. When calling the triangle class, its __init__ takes precedence.
+
+### Multiple Inheritance
+
+Let us explore a more complex example to understand how multiple inheritance works. We will model bank accounts.
+
+```python
+
+class Account:
+    """An account has a balance and a holder.
+    All accounts share a common interest rate.
+    """
+
+    interest = 0.02  # A class attribute
+
+    def __init__(self, account_holder):
+        self.holder = account_holder
+        self.balance = 0
+
+    def deposit(self, amount):
+        """Add amount to balance."""
+        self.balance = self.balance + amount
+        return self.balance
+
+    def withdraw(self, amount):
+        """Subtract amount from balance if funds are available."""
+        if amount > self.balance:
+            return 'Insufficient funds'
+        self.balance = self.balance - amount
+        return self.balance
+
+# this shows how inheritance works, we just modify the withdraw method, but it is good practice to re-use code instead of hard-coding
+
+# example of inheritance - checking accounts ARE accounts
+class CheckingAccount(Account):
+    """A bank account that charges for withdrawals.
+
+    >>> ch = CheckingAccount('Jack')
+    >>> ch.balance = 20
+    >>> ch.withdraw(5)
+    14
+    >>> ch.interest
+    0.01
+    """
+
+    withdraw_fee = 1
+    interest = 0.01
+
+    def withdraw(self, amount):
+        return Account.withdraw(self, amount + self.withdraw_fee)
+        # Alternatively:
+        return super().withdraw(amount + self.withdraw_fee)
+
+
+# in this example we use a class to create other instances of other classes.
+
+# example of composition - a bank HAS accounts
+class Bank:
+    """A bank has accounts and pays interest.
+
+    >>> bank = Bank()
+    >>> john = bank.open_account('John', 10)
+    >>> jack = bank.open_account('Jack', 5, CheckingAccount)
+    >>> jack.interest
+    0.01
+    >>> john.interest = 0.06
+    >>> bank.pay_interest()
+    >>> john.balance
+    10.6
+    >>> jack.balance
+    5.05
+    """
+    def __init__(self):
+        self.accounts = []
+
+    def open_account(self, holder, amount, account_type=Account):
+        """Open an account_type for holder and deposit amount."""
+        account = account_type(holder)
+        account.deposit(amount)
+        self.accounts.append(account)
+        return account
+
+    def pay_interest(self):
+        """Pay interest to all accounts."""
+        for account in self.accounts:
+            account.deposit(account.balance * account.interest)
+
+
+# same inheritance as above - different example
+class SavingsAccount(Account):
+    deposit_fee = 2
+    def deposit(self, amount):
+        return Account.deposit(self, amount - self.deposit_fee)
+
+# multiple inheritance
+
+# what exactly happens here:
+# special withdraw behavior is inherited from CheckingAccount
+# special deposit behavior is inherited from SavingsAccount
+# the rest is inherited from Account - which is just the interest
+class BestAccount(CheckingAccount, SavingsAccount):
+    def __init__(self, account_holder):
+        self.holder = account_holder
+        self.balance = 1
+     
+```
+
+### Magic Methods
+
+Objects and classes have a list of standard methods that work well with python features. One of these is the __init__ method, that initializes an instance of a class during construction. There are many such methods and below we list them out.
+
+```python
+
+class Sudoku:
+
+
+    # this method gets called first, and returns an object that is then passed in the __init__ method
+    def __new__(cls):
+        print ("__new__ magic method is called")
+        inst = object.__new__(cls)
+                return inst
+
+    # the init method gets automatically called when you run something like ; me = Sudoku(9, 3)
+    def __init__(self, row_len, box_size):
+        self.name = "Sudoku Puzzle"
+        self.row_length = row_len
+        self.col_length = row_len # sudokus must be square
+        self.box_size = box_size
+        self.num_cells = row_len * row_len 
+        # these 4 variables will be called by me.box_size, etc. 
+
+    # the str method overrides the __repr__ method, which is called by default
+    def __str__(self):
+        return "This is a " + self.name
+
+    # this method is used for Python's interpretation. Can be anything for custom classes
+    def __repr__(self):
+        return self.name
+    
+    def __add__(self, x):
+        # method used to add two values if it makes sense
+
+    def __del__(self):
+        # destructor method - caled when you delete object
+
+
+```
+
+### Trees - Class
+
+See section "Tree - Data Abstraction" for comparison. Here we implement the same tree but using Python Objects. Personally I believe this is cleaner, but to each their own.
+
+```python
+
+class Tree:
+    """A tree is a label and a list of branches."""
+    def __init__(self, label, branches=[]):
+        self.label = label
+        for branch in branches:
+            assert isinstance(branch, Tree)
+        self.branches = list(branches)
+
+    def __repr__(self):
+        if self.branches:
+            branch_str = ', ' + repr(self.branches)
+        else:
+            branch_str = ''
+        return 'Tree({0}{1})'.format(repr(self.label), branch_str)
+
+    # this method calls the indented function to return a "pretty" tree representation
+    def __str__(self):
+        return '\n'.join(self.indented())
+
+    def indented(self):
+        lines = []
+        for b in self.branches:
+            for line in b.indented():
+                lines.append('  ' + line)
+        return [str(self.label)] + lines
+
+    def is_leaf(self):
+        return not self.branches
+
+
+def fib_tree(n):
+    """A Fibonacci tree.
+
+    >>> print(fib_tree(4))
+    3
+      1
+        0
+        1
+      2
+        1
+        1
+          0
+          1
+    """
+    if n == 0 or n == 1:
+        return Tree(n)
+    else:
+        left = fib_tree(n-2)
+        right = fib_tree(n-1)
+        fib_n = left.label + right.label
+        return Tree(fib_n, [left, right])
+
+
+def leaves(tree):
+    """Return the leaf values of a tree.
+
+    >>> leaves(fib_tree(4))
+    [0, 1, 1, 0, 1]
+    """
+    if tree.is_leaf():
+        return [tree.label]
+    else:
+        return sum([leaves(b) for b in tree.branches], [])
+
+
+def height(tree):
+    """The height of a tree."""
+    if tree.is_leaf():
+        return 0
+    else:
+        return 1 + max([height(b) for b in tree.branches])
+
+
+def prune(t, n):
+    """Prune sub-trees whose label value is n.
+
+    >>> t = fib_tree(5)
+    >>> prune(t, 1)
+    >>> print(t)
+    5
+      2
+      3
+        2
+    """
+    t.branches = [b for b in t.branches if b.label != n]
+    for b in t.branches:
+        prune(b, n)
+
+
+```
 
 ## Docstring and Assert
 
@@ -949,7 +1332,7 @@ from doctest import testmod, run_docstring_examples
 # tests everything within sum_positive.py
 testmod()
 
-# tests a single function - second argument always fixed, thirs is to "verbose"
+# tests a single function - second argument always fixed, this is to "verbose"
 run_docstring_examples(sum_positive, globals(), True)
 
 ```
@@ -2254,6 +2637,8 @@ In the same way, we can deal with complex data types (not the classes that are p
 
 This creates some barriers in our code, where we are programming at different levels. This is extremely helpful when maintaining and updating code.
 
+### Rational Numbers
+
 ```python
 
 # the example chosen below is the one of rational numbers, or fractions. 
@@ -2318,6 +2703,236 @@ def pair(x, y):
 def select(p, i):
     """Return the element at index i of pair p."""
     return p(i)
+
+
+```
+
+### Trees - Data Abstraction
+
+Typically when you are dealing with a complex data structure it is a good idea to implement it as an abstract data type. It is easier for scalability and maintainablity. Here we discuss implementing trees in such a way.
+
+A tree has a root node (or label) and is composed of one or more branches. Each branch can be a tree itself, until we reach a node that has no "children" and we call that a leaf.
+
+```python
+
+# Abstraction - a tree is a list of labels and branches. How we implement these is part of the abstraction.
+
+# I can define a tree as follows:
+my_tree = tree(3, [tree(1),
+                     tree(2, [tree(1),
+                              tree(1)])])
+
+# We use the tree "constructor" to build the tree, without specifying how it is built. The tree function will take care of that
+
+def tree(label, branches=[]):
+    # for each branch we make sure it is a tree
+    for branch in branches:
+        assert is_tree(branch)
+    
+    return [label] + list(branches) # return a list of branches, in case we don't implement tree as a list of lists anymore 
+
+# selectors
+def label(tree):
+    return tree[0]
+
+def branches(tree):
+    return tree[1:]
+
+# validity check
+def is_tree(tree):
+
+    # check the structure of tree
+    if type(tree) != list or len(tree) < 1:
+        return False
+
+    # check that each branch is a tree itself
+    for branch in branches(tree):
+        if not is_tree(branch):
+            return False
+    return True
+
+def is_leaf(tree):
+
+    # if it is the last level we call it a leaf
+    return not branches(tree)
+
+
+```
+
+How do we recursively build a tree without specifying it one by one? Example on Fibonacci sequence:
+
+```python
+
+def fib_tree(n):
+
+    if n <= 1: 
+        return tree(n)
+    
+    else:
+        left, right = fib_tree(n - 1), fib_tree(n - 2)
+`
+    return tree(label(left) + label(right), [left, right])
+    
+
+```
+
+Other functions that we can implement on top of this data abstraction.
+
+```python
+
+# this function creates a list of all the leaves it finds. summing it together counts the number of leaves
+def count_leaves(tree):
+
+    if is_leaf(tree):
+        return 1
+    
+    else:
+        return sum([count_leaves(b) for b in branches(tree)])
+
+
+# this function goes through the tree and prints all the branches and leaves with indentation 
+def print_tree(tree, indent = 0):
+
+    print(' ' * indent + str(label(tree)))
+
+    for b in branches:
+        print_tree(b, indent + 1)
+    
+
+
+```
+
+## Iteration
+
+Iterators are ways to loop a list of values "lazily", meaning the computation only occurs when it is needed.
+
+A range also computes values lazily, if we set range(10, 100000), it does not compute all the values immediately, but only once you start calling it.
+
+Dictionaries, strings, list, tuples and sets are all iterable items.
+
+```python
+
+lst = [1, 2, 3, 4]
+
+# creates iterator object
+iterator = iter(lst)
+
+next(iterator) # 1
+next(iterator) # 2 
+next(iterator) # 3
+next(iterator) # 4
+next(iterator) # Traceback: StopIteration
+
+# once you finish looping you cannot go back, but the iterator keeps track of exactly where you are
+
+# one typical way to handle iterators is the following
+
+try:
+    next(iterator)
+
+except StopIteration:
+    print("Iteration ended")
+
+# you can call iter on an iterator, but it will bind it's name to the same object
+f = iter(iterator)
+f is iterator # True
+
+# Some functions that return iterators:
+
+range()
+map()
+filter()
+zip()
+reversed()
+
+```
+
+Bonus - how does a for loop actually work? It returns the iterator method of the iterable item and loops over it!
+
+```python
+
+counts = [1, 2, 3]
+
+for count in counts:
+    print(count)
+
+# what is actually happening in here is the following:
+
+items = counts.__iter__() # calls the iter method and bind it to items
+try:
+    while True:
+        count = items.__next__() # keeps calling next
+        print(count)
+except StopIteration: # until we reach the end
+    pass
+
+```
+
+A generator is a function that instead of *returning* values it *yields* them.
+It returns a generator itself, which is a special type of iterator. This means we can loop through a generator function.
+
+```python
+
+def letters_generator():
+    current = 'a'
+    while current <= 'd':
+        yield current
+        current = chr(ord(current)+1)
+
+for letter in letters_generator():
+    print(letter)
+
+
+# prints:
+# a
+# b
+# c
+# d
+
+
+# generator can also be called recursively
+
+def countdown(k):
+    if k > 0:
+        yield k
+
+        # now this is both a recursion and a "yield from".
+        # generator functions are themselves iterable, this keeps yielding every number from k downwards. 
+        yield from countdown(k -1) 
+
+    else:
+        yield('Iteration complete.') 
+
+# more complex example - get the permutations of a sequence
+
+def gen_perms(seq):
+    """Generates all permutations of the given sequence. Each permutation is a
+    list of the elements in SEQ in a different order. The permutations may be
+    yielded in any order.
+
+    >>> perms = gen_perms([100])
+    >>> type(perms)
+    <class 'generator'>
+    >>> next(perms)
+    [100]
+    >>> try: #this piece of code prints "No more permutations!" if calling next would cause an error
+    ...     next(perms)
+    ... except StopIteration:
+    ...     print('No more permutations!')
+    No more permutations!
+    >>> sorted(gen_perms([1, 2, 3])) # Returns a sorted list containing elements of the generator
+    [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+    >>> sorted(gen_perms((10, 20, 30)))
+    [[10, 20, 30], [10, 30, 20], [20, 10, 30], [20, 30, 10], [30, 10, 20], [30, 20, 10]]
+    >>> sorted(gen_perms("ab"))
+    [['a', 'b'], ['b', 'a']]
+    """
+    if not seq:
+        yield []
+    else:
+        for perm in gen_perms(seq[1:]):
+            for i in range(len(seq)):
+                yield perm[i:] + [seq[0]] + perm[:i] 
 
 
 ```
