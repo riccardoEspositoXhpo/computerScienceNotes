@@ -968,6 +968,17 @@ Beily = Person()
 # prints "Hello"
 print(Beily.greet())
 
+# check if attribute exists
+hasattr(Beily, 'age')
+
+type(Person.greet) # <class 'function'>
+
+type(Beily.greet) # <class 'method'>
+
+
+getattr(Beily, 'greet') # returns the method itself, similar to dot notation above
+
+
 ```
 
 Classes are commonly defined with an __init__ method - a block of code that executes whenever you create an instance.
@@ -1011,7 +1022,44 @@ print(num1.attr)
 # delete an object
 del num1
 
-```  
+``` 
+
+### Instance and Class Attributes
+
+Variables behave differently depending if they are class or instance attributes. It is important to understand the differences in order to understand the effects.
+
+```python
+
+class Account:
+    interest = 0.02            # A class attribute
+    def __init__(self, account_holder):
+        self.balance = 0
+        self.holder = account_holder
+    # Additional methods would be defined here
+
+"""
+>>> # Class attribute behavior explained
+>>> spock_account = Account('Spock')
+>>> kirk_account = Account('Kirk')
+>>> spock_account.interest
+0.02
+>>> kirk_account.interest
+0.02
+>>> Account.interest = 0.04
+>>> spock_account.interest
+0.04
+>>> kirk_account.interest
+0.04
+>>> kirk_account.interest = 0.08
+>>> kirk_account.interest
+0.08
+>>> spock_account.interest
+0.04
+
+"""
+
+
+```
 
 ### Inheritance
 
@@ -1163,7 +1211,25 @@ class BestAccount(CheckingAccount, SavingsAccount):
     def __init__(self, account_holder):
         self.holder = account_holder
         self.balance = 1
-     
+
+
+"""
+Some final note - python will check the inheritance from left to right and then upwards.
+In this case it uses the following diagram
+
+               ____ Account ____
+              |                 |        
+    CheckingAccount         SavingsAccount
+              |                 |
+              |__ BestAccount __|
+
+As a matter of fact, the order of resolution can be predicted and viewed via the mro()
+
+>>> [c.__name__ for c in BestAccount.mro()]
+['BestAccount', 'CheckingAccount', 'SavingsAccount', 'Account', 'object']
+
+"""
+
 ```
 
 ### Magic Methods
@@ -1203,6 +1269,24 @@ class Sudoku:
 
     def __del__(self):
         # destructor method - caled when you delete object
+
+    def __bool__(self);
+        # objects in python typically return "true" when called, this can override the behavior
+        
+        # in this case we could stipulate that Sudoku is False if it is incomplete.
+        # >>> sudoku1 = Sudoku(9, 3)
+        # >>> sudoku1 # False 
+    
+    def __len__(self):
+        # can be used to define what it means to find the length of Sudoku
+    
+     def __call__(self, k):
+        
+        # an object can be CALLED like any other function
+        # >>> sudoku1 = Sudoku(9, 3)
+        # >>> sudoku1(4) # calls sudoku with value 4
+        # returns 8, just for demonstration purposes
+        return k * 2
 
 
 ```
@@ -1303,6 +1387,120 @@ def prune(t, n):
 
 
 ```
+
+### Object Decorators
+
+These are decorators that are typically found in objects and they serve different purposes. In the end they are just functions. Let us see some examples below.
+
+```python
+
+# let us take a normal class as example
+class Student(object):
+
+    # a method such as this takes the instance as the first argument - "self" is the convention
+    def __init__(self, first_name, last_name):
+        self.first_name = first_name
+        self.last_name = last_name
+    
+    # a classmethod instead takes in the uninstantiated class itself
+    # this can be used to facilitate the creation of an instance 
+    @classmethod
+    def from_string(cls, name_str):
+        first_name, last_name = map(str, name_str.split(' '))
+        student = cls(first_name, last_name)
+        return student
+
+    # other example - can have multiple in same class
+    @classmethod
+    def from_json(cls, json_obj):
+        # parse json...
+        return student
+
+    # a staticmethod is similar to classmethod except it doesn't require the cls parameter
+    @staticmethod
+    def is_full_name(name_str):
+        names = name_str.split(' ')
+        return len(names) > 1
+
+# instance init
+tizio = Student('Tizio',  'Caio')
+# classmethod - the advantage is that you can actually call a method before you create "tizio"
+tizio_2 = Student.from_string('Tizio Caio')
+
+# staticmethod - again can be called before an instance is created
+Student.is_full_name('Tizio Caio') # returns True
+
+```
+
+The property decorator is instead used to call a method without specifying a call expression, without the ().
+
+```python
+
+# property is useful if we have two ways to represent some class, and we want to grab one but automatically compute the other
+
+# here we define a complex number, but we define it as real and imag.
+# however we want to keep track of the equivalent magnitude and angle representation.
+class ComplexRI(Complex):
+    def __init__(self, real, imag):
+        self.real = real
+        self.imag = imag
+
+    @property
+    def magnitude(self):
+        return (self.real ** 2 + self.imag ** 2) ** 0.5
+
+    @property
+    def angle(self):
+        return atan2(self.imag, self.real)
+
+    def __repr__(self):
+        return 'ComplexRI({0:g}, {1:g})'.format(self.real, self.imag)
+
+
+>>> ri = ComplexRI(5, 12)
+>>> ri.real
+5
+>>> ri.magnitude # magnitude gets omputed without specifying it
+13.0
+>>> ri.real = 9
+>>> ri.real
+9
+>>> ri.magnitude # value is kept in sync with real and imag
+15.0
+
+```
+
+## Memoization
+
+Let us take the Fibonacci example used in other parts of this wiki - *see fib_tree(n)*.
+Calculating the Fibonacci tree recursively is terribly inefficient, as you keep re-computing the same values.
+Memoization is the process of storing values that were already computed so they can be re-used later.
+
+```python
+
+def fib(n):
+        if n == 0:
+            return 0
+        if n == 1:
+            return 1
+        return fib(n-2) + fib(n-1)
+
+# this function keeps adding values to the cache if they aren't there
+def memo(f):
+    cache = {}
+    def memoized(n):
+        if n not in cache:
+            cache[n] = f(n)
+        return cache[n]
+    return memoized
+
+>>> fib(34) # this version of fib has a ridiculous amount of function calls.
+5702887
+>>> memo_fib = memo(fib) # this version of fib is faster
+>>> memo_fib(34)
+35 # for such a repetitive calculation, memoization is incredibly efficient
+
+```  
 
 ## Docstring and Assert
 
@@ -2646,7 +2844,7 @@ items:
 Just like we can use functions to abstract ideas, below we show a powerful method to build complex programs by manipulating data.
 When we implement a complex function, we can call auxilliary functions to perform our calculations and we do not need to know how these are implemented.
 
-In the same way, we can deal with complex data types (not the classes that are pre-defined in python) without knowing exactly how these are implemented. 
+In the same way, we can deal with complex data types without knowing exactly how these are implemented.
 
 This creates some barriers in our code, where we are programming at different levels. This is extremely helpful when maintaining and updating code.
 
