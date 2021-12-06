@@ -17,7 +17,7 @@
   - CSS
   - SQL
 
-## Python For Everybody - DONE
+## Python For Everybody - Done
 
 - Format:
   - <https://www.py4e.com/>
@@ -51,8 +51,9 @@
 - <https://www.coursera.org/learn/cs-programming-java>
 - <https://www.coursera.org/learn/algorithms-part1>
 - <https://www.coursera.org/learn/algorithms-part2>
-- CS61B! Youtube Playlist
+- CS61B - Youtube Playlist & Course contents
 - C for everybody (continuation of PY4E)
-- CS50 intro to machine learnings
-- Ossu Computer Science Degree - Continue
+- CS50 intro to machine learning
+- Ossu Computer Science Degree - <https://github.com/ossu/computer-science>
+
   

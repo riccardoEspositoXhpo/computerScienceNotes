@@ -649,8 +649,15 @@ popitem() - Removes the last inserted key-value pair
 setdefault() - Returns the value of the specified key. If the key does not exist: insert the key, with the specified value
 update() - Updates the dictionary with the specified key-value pairs
 values() - Returns a list of all the values in the dictionary
+add() - Adds key, value pair to dictionary
 
 """
+
+
+dict.get(item, fallback)
+
+# if you don't provide defaultvalue this will Error if it can't find the key
+dict.pop(key, defaultvalue)
 
 
 ```
@@ -1043,6 +1050,12 @@ class Triangle(Polygon):
         # just trust me this is the formula
         area = (s * (s - a) * (s - b) * (s - c)) ** 0.5
         print("The area of the triangle is ", area)
+
+
+class Square(Polygon):
+    def __init__(self):
+        # this method can be used to access the parent class method, it is much cleaner than above imo
+        super().__init__(no_of_sides = 4)
 
 ```
 
