@@ -42,9 +42,12 @@
   - Environments, Abstraction, Control
   - Data Structures
   - Functions
+  - OOP
 
 - Programming Tools:
   - Python
+  - Scheme
+  
 
 ## Next Courses List
 
