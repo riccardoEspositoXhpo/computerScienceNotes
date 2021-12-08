@@ -680,6 +680,38 @@ one = (10, )
 
 ```
 
+### Sets
+
+Python also has a built-in concept of a set. Sets are unordered collections of unique data, meaning duplicates are automatically removed.
+
+```python
+>>> s = {3, 2, 1, 4, 4}
+>>> s
+{1, 2, 3, 4}
+```
+
+### Set Methods
+
+```python
+
+>>> s = {1, 2, 3, 4}
+>>> s.union({1, 5})
+{1, 2, 3, 4, 5}
+
+>>> s.intersection({6, 5, 4, 3})
+{3, 4}
+
+s.isdisjoint # flags if no overlapping values
+s.issubset # all values contained in other set
+s.issuperset # opposite of is subset
+
+s.add 
+s.discard # doesn't give keyerror
+s.remove # gives keyerror if not found
+s.pop
+s.clear
+
+
 ## Loading Configuration Files
 
 ```python
@@ -1467,6 +1499,43 @@ class ComplexRI(Complex):
 9
 >>> ri.magnitude # value is kept in sync with real and imag
 15.0
+
+```
+
+### Recursive Objects
+
+The way we implement an object can in fact reference the concept of recursion. Example is below with the popular "linked list".
+
+```python
+
+class Link:
+    """A linked list with a first element and the rest."""
+    empty = ()
+    def __init__(self, first, rest=empty):
+        assert rest is Link.empty or isinstance(rest, Link)
+        self.first = first
+        self.rest = rest
+    
+    # here we implement a different logic for "bracket notation". See below,
+    # we can select from linked lists like we do for an array
+    def __getitem__(self, i):
+        if i == 0:
+            return self.first
+        else:
+            return self.rest[i-1]
+    
+    # this is the recursive definition, the length of the list is always 1 + len(rest)
+    # when we reach the empty () we have counted all the list elements
+    def __len__(self):
+        return 1 + len(self.rest)
+
+"""
+>>> s = Link(3, Link(4, Link(5)))
+>>> len(s)
+3
+>>> s[1]
+4
+"""
 
 ```
 
@@ -3033,6 +3102,9 @@ next(iterator) # 2
 next(iterator) # 3
 next(iterator) # 4
 next(iterator) # Traceback: StopIteration
+
+next(iterator, 0) # helpful to provide a fallback value, either if you are building up a count/sum
+# or if you want to avoid raising a StopIteration exception
 
 # once you finish looping you cannot go back, but the iterator keeps track of exactly where you are
 
