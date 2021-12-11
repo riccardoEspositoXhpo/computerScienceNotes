@@ -711,6 +711,7 @@ s.remove # gives keyerror if not found
 s.pop
 s.clear
 
+```
 
 ## Loading Configuration Files
 
@@ -731,7 +732,7 @@ def configLoader():
     try:
         with open(file) as file:
             return yaml.load(file, Loader=yaml.FullLoader)
-    except FileNotFoundError as fe:
+    except FileNotFoundError:
         exit(f'Could not find {file}')
 
     except Exception as e:
@@ -1539,6 +1540,21 @@ class Link:
 
 ```
 
+### Keep Track of Objects
+
+One interesting way to keep track of all instances created is to leverage class attributes.
+
+```python
+class Test:
+     count = 0
+     def __init__(self):
+        Test.count += 1
+
+```
+
+In this way, every time we create an instance, we increment the total count of Test class by 1. This is effectively keeping track of our creations. 
+Similarly, we can remove the count in a __del__ method.
+
 ## Memoization
 
 Let us take the Fibonacci example used in other parts of this wiki - *see fib_tree(n)*.
@@ -1571,7 +1587,7 @@ def memo(f):
 
 ```  
 
-## Docstring and Assert
+## Docstring and Doctests
 
 Python programs can contain a small sample execution to test if the program is working as expected.
 
@@ -1617,6 +1633,10 @@ run_docstring_examples(sum_positive, globals(), True)
 
 ```
 
+## Exceptions
+
+### Assert
+
 Some functions require a certain domain of inputs. When these are not provided, it is useful to make the call fail. An assert statement can help with this.
 
 ```python
@@ -1640,6 +1660,53 @@ def invert(x):
 ```
 
 In this case, when we call the function with an input of 0 it will nicely exit with a traceback, and print our message to the console.
+
+We can choose to ignore assert exceptions by just running this in the command line.
+
+```unix
+python3 -O 
+
+```
+
+### Raise Statements
+
+A way to raise exceptions is to use a raise statement.
+
+There are some built-in error types:
+
+- TypeError - a function received the wrong argument
+- NameError - variable is not defined or not found
+- KeyError - a dictionary does not have a key
+- RuntimeError - catch-all for anything else
+
+```python
+
+abs('hello') # TypeError
+hello # NameError
+{}['hello'] # keyError
+def f(): f() # infinite loop - RuntimeError
+
+```
+
+### Try Statement
+
+This statement is able to handle exceptions and can be programmed to behave in a certain way if they occur.
+
+```python
+
+try:
+    x = 1 / 0
+
+except ZeroDivisionError as e:
+    print('handling a', type(e))
+    x = 0 # important to do this because x will never be bound to anything
+
+
+```
+
+Try statements can also be nested within each other.
+
+
 
 ## Quine (Python)
 

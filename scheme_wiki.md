@@ -26,6 +26,18 @@ Expressions are contained within parentheses. You must prefix the operation you 
       6))
 
 57
+
+
+(modulo 29 5)
+4
+
+(or 1 2 )
+; returns true
+
+(and 1 2)
+; returns true
+
+
 ```
 
 Indentation is irrelevant, but is often used to provide some order to the code.
@@ -44,6 +56,27 @@ Special forms in Scheme look syntacticallly like an expression, but are evaluate
 
 The above is some kind of abs function, if x is greater than 0, we return x, else we return -x.
 
+```scheme
+
+; if statements can be nested too
+
+(define (over-or-under-if num1 num2)
+    (if (< num1 num2) -1 (if (> num1 num2) 1 0)))
+
+; a different way to provide if - elif - else without nesting ifs is to use cond
+
+(cond (test1
+       (action1))
+      (test2
+       (action2))
+      (test3
+       (action3))
+      (else
+       (action4)))
+
+
+```
+
 ### Booleans
 
 ```scheme
@@ -55,6 +88,9 @@ The above is some kind of abs function, if x is greater than 0, we return x, els
 
 ; false value
 #f
+
+scm> (even? (quotient 45 2))
+#t
 
 ```
 
