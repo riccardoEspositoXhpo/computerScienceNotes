@@ -888,6 +888,16 @@ $        Matches the end of the line
 
 )        Indicates where string extraction is to end
 
+\w       Matches any word, letter or underscore
+
+\d       Matches a digit
+
+\b       Matches a word boundary, start of a new word
+
+{min,
+ max}   Matches min to max number of times a certain pattern
+
+
 """
 
 # functions

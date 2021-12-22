@@ -207,4 +207,3 @@ a
 ```
 
 In this way we were able to just access the representation of scheme lists without defining them.
-

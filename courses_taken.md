@@ -1,6 +1,6 @@
 # Courses Taken
 
-## CS50 - Done
+## CS50x - Done
 
 - Format:
   - Edx
@@ -32,7 +32,7 @@
   - HTML
   - JSON
 
-## Structure and Interpretation of Computer Programs - TODO
+## Structure and Interpretation of Computer Programs - CS61A - DONE
 
 - Format:
   - Youtube Playlist: John Denero
@@ -43,13 +43,15 @@
   - Data Structures
   - Functions
   - OOP
+  - Interpreters
 
 - Programming Tools:
   - Python
   - Scheme
-  
+  - SQL
 
 ## Next Courses List
+
 
 - <https://www.coursera.org/learn/cs-programming-java>
 - <https://www.coursera.org/learn/algorithms-part1>
@@ -58,5 +60,3 @@
 - C for everybody (continuation of PY4E)
 - CS50 intro to machine learning
 - Ossu Computer Science Degree - <https://github.com/ossu/computer-science>
-
-  
