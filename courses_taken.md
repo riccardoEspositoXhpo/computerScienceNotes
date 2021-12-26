@@ -50,10 +50,18 @@
   - Scheme
   - SQL
 
+## Programming With a Purpose
+
+- Format:
+  - Coursera
+
+- Topics Learned:
+
+- Programming Tools:
+  - Java
+
 ## Next Courses List
 
-
-- <https://www.coursera.org/learn/cs-programming-java>
 - <https://www.coursera.org/learn/algorithms-part1>
 - <https://www.coursera.org/learn/algorithms-part2>
 - CS61B - Youtube Playlist & Course contents
