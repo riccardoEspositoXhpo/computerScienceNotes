@@ -154,7 +154,7 @@ int main(void)
 {
 
     // When you declare an array you must specify the size
-    int socres[TOTAL];
+    int scores[TOTAL];
 }
 ```
 
