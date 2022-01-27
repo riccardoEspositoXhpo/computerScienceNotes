@@ -3127,7 +3127,7 @@ def fib_tree(n):
     
     else:
         left, right = fib_tree(n - 1), fib_tree(n - 2)
-`
+
     return tree(label(left) + label(right), [left, right])
     
 
