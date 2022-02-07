@@ -442,3 +442,144 @@ double b = Double.NEGATIVE_INFINITY;
 
 
 ```
+
+## Input Output
+
+Java supports reading streams of data as opposed to just argument. You can technically connect two java programs by piping them together and providing a constant stream of data from one to the other, without overloading your current system storage.
+
+### Parsing File Inputs
+
+```java
+// example code to count words in a file
+public class WordCount {
+    public static void main(String[] args) {
+
+        int count = 0;    
+        while (!StdIn.isEmpty()) {
+            String word = StdIn.readString();
+            count++;
+        }
+      
+        // output
+        StdOut.println("number of words  = " + count);
+    }
+}
+
+```
+
+### Command Line Input Stream
+
+```java
+
+public class TwentyQuestions {
+    public static void main(String[] args) {
+
+        // Generate a number and answer questions
+        // while the user tries to guess the value.
+        int secret = 1 + (int) (Math.random() * 1000000);
+
+        StdOut.print("I'm thinking of a number ");
+        StdOut.println("between 1 and 1,000,000");
+        int guess = 0; 
+        while (guess != secret) {
+
+            // Solicit one guess and provide one answer
+            StdOut.print("What's your guess? ");
+            guess = StdIn.readInt();
+            if      (guess < secret) StdOut.println("Too low");
+            else if (guess > secret) StdOut.println("Too high");
+            else                     StdOut.println("You win!");
+        }
+    }
+} 
+
+
+```
+
+### Drawing
+
+```java
+
+public class Checkerboard {
+    
+    public static void main(String[] args) {
+        
+        int n = Integer.parseInt(args[0]);
+        StdDraw.setXscale(0, n);
+        StdDraw.setYscale(0, n);
+
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++){
+                if ((i + j) % 2 == 0) StdDraw.setPenColor(StdDraw.WHITE);
+                else StdDraw.setPenColor(StdDraw.BLACK);
+                StdDraw.filledSquare(i + 0.5, j + 0.5, 0.5);
+
+            
+            }            
+        }
+
+
+    }
+}
+
+
+```
+
+## Static Methods
+
+Implementing functions in Java is simple and lends itself to modular programming.
+
+```java
+
+// disregard the low utility of this code - for demostration purposes only
+public class Averages {
+    // a class contains a list of functions, and main is the one that is executed
+    public static double average(double a, double b) {
+        return (a + b) / 2;
+        
+    }
+    public static double average(double a, double b, double c) {
+        return (a + b + c) / 3;
+        // two static methods can have the same name and different number of arguments
+        // they will be called appropriately
+    }
+    public static void main(String[] args) {
+        
+        StdOut.println(average(1, 5));
+        StdOut.println(average(1, 5, 7));
+    }
+}
+
+
+```
+
+If you implement a static method just to host some functions then it is still mandatory to have an empty main method.
+
+```java
+public class FunctionExamples {
+
+    // absolute value of an int value
+    public static int abs(int x) {
+        if (x < 0) return -x;
+        else       return  x;
+    }
+
+    // absolute value of a double value (overloading)
+    public static double abs(double x) {
+        if (x < 0) return -x;
+        else       return  x;
+    }
+
+    // primality test (multiple return statements)
+    public static boolean isPrime(int n) {
+        if (n < 2) return false; 
+        for (int i = 2; i <= n/i; i++) 
+            if (n % i == 0) return false; 
+        return true; 
+    }
+
+    public static void main(String[] args) {
+    }
+}
+
+```
