@@ -2,7 +2,7 @@
 
 This wiki lists out some math concepts that are beyond trivial in case I need to access them in future development projects.
 
-## Numbers
+## Algebra
 
 ### Last Digit
 
