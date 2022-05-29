@@ -66,12 +66,15 @@ Math.sin(x);
 Math.cos(x);
 Math.pow(x, 2);
 Math.sqrt(x);
+Math.random();
 
 ```
 
 ### Loops and Conditions
 
 ```java
+
+int x = 2;
 
 if (x > 0) {
     x = 10
@@ -581,5 +584,231 @@ public class FunctionExamples {
     public static void main(String[] args) {
     }
 }
+
+```
+
+## Recursion
+
+Recursion occurs when a function calls itself. We willn not cover the basics here, but focus on some common pitfalls:
+
+- You are missing the base case
+- You are not reducing the size of the problem
+- You go in StackOverflow if your input is too large
+
+The last point is particularly important. You may think you have devised the best recursive solution to a problem only to find out that it is spectacularly inefficient. Always consider the memory requirements of your programs.
+
+```java
+
+// example of inefficient recursion
+
+public class Fibonacci {
+    public static long fibonacci(int n) {
+        if (n <= 1) return n;
+        else return fibonacci(n-1) + fibonacci(n-2);
+    }
+
+    public static void main(String[] args) {
+        int n = Integer.parseInt(args[0]);
+        StdOut.println(fibonacci(n));
+
+    }
+
+}
+
+/* Why is this inefficient?
+
+To calculate a Fibonacci number, you repeatedly re-run the recursion on numbers you have already computed. 
+Wouldn't it be smarter to save down the result in some array and quickly retrieve it later?
+
+*/
+
+// example of top-down fibonacci
+public class TopDownFibonacci {
+    private static long[] f = new long[92];
+
+    public static long fibonacci(int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+
+        // return cached value (if previously computed)
+        if (f[n] > 0) return f[n];
+
+        // compute and cache value
+        f[n] = fibonacci(n-1) + fibonacci(n-2);
+        return f[n];
+    }
+
+    public static void main(String[] args) {
+        int n = Integer.parseInt(args[0]);
+        for (int i = 1; i <= n; i++)
+            StdOut.println(i + ": " + fibonacci(i));
+    }
+
+}
+
+
+// example of bottom up Fibonacci
+
+public class BottomUpFibonacci {
+
+    public static long fibonacci(int n) {
+        long[] f = new long[n+1];
+        f[0] = 0;
+        f[1] = 1;
+        for (int i = 2; i <= n; i++)
+            f[i] = f[i-1] + f[i-2]; // this is actually not recursion, we are building up the Fibonacci sequence
+        return f[n];
+    }
+
+    public static void main(String[] args) {
+        int n = Integer.parseInt(args[0]);
+        for (int i = 1; i <= n; i++)
+            StdOut.println(i + ": " + fibonacci(i));
+    }
+
+}
+
+```
+
+## Java Class and Variables
+
+```java
+
+public class Test {
+
+    // this gets instantiated together with the class. Also you can't access it outside it.
+    private static int a = 2;
+
+    // this method can be accessed by all parts of the program
+    public static int pub(int a) {
+        return a;
+    }
+
+    // this one is only accessible by the Test class
+    private static int priv(int a) {
+        return a;
+    }
+
+}
+
+```  
+
+In general, a method can be public, private or protected. Below is a table that summarizes where the data can be read:
+
+|           |Class|Package|Subclass - same Pkg|Subclass - diff Pkg|World|
+|-----------|-----|-------|-------------------|-------------------|-----|
+|public     |  +  |   +   |         +         |         +         |  +  |
+|protected  |  +  |   +   |         +         |         +         |  -  |
+|no modifier|  +  |   +   |         +         |         -         |  -  |
+|private    |  +  |   -   |         -         |         -         |  -  |
+
+## Objects
+
+Java is very suited for OOP, as everything in Java is a Class. Below we show some code on how to create / instantiate new data types in Java.
+
+One creates a new object by: obj = new Clock(2, 30);
+
+```java
+
+public class Clock {
+
+    // private means that this cannot be accessed externally from Clock
+    // final means this can't be changed - i.e. a CONSTANT
+    private static final int MINUTES_PER_HOUR = 60;
+    private static final int HOURS_PER_DAY = 24;
+    private int hour, min;
+
+
+    // this is the "constructor"
+    public Clock(int h, int m) {
+        hour = h;
+        min = m;
+        if (hour < 0 || hour >= HOURS_PER_DAY || min < 0 || min >= MINUTES_PER_HOUR)
+            throw new IllegalArgumentException();
+    }
+
+    // Creates a clock whose initial time is specified as a string, using the format HH:MM.
+    public Clock(String s) {
+        if (!s.contains(":")) throw new IllegalArgumentException();
+        int i = s.indexOf(':');
+        String shour = s.substring(0, i);
+        String smin = s.substring(i + 1);
+        if (shour.length() != 2 || smin.length() != 2) throw new IllegalArgumentException();
+        hour = Integer.parseInt(shour);
+        min = Integer.parseInt(smin);
+        if (hour < 0 || hour >= HOURS_PER_DAY || min < 0 || min >= MINUTES_PER_HOUR)
+            throw new IllegalArgumentException();
+    }
+
+    // Returns a string representation of this clock, using the format HH:MM.
+    public String toString() {
+        String shour = Integer.toString(hour);
+        String smin = Integer.toString(min);
+        if (shour.length() == 1) shour = "0" + shour;
+        if (smin.length() == 1) smin = "0" + smin;
+        return shour + ":" + smin;
+    }
+
+    // Is the time on this clock earlier than the time on that one?
+    public boolean isEarlierThan(Clock that) {
+        return (hour < that.hour) || (hour == that.hour && min < that.min);
+    }
+
+    // Adds 1 minute to the time on this clock.
+    public void tic() {
+        if (min != MINUTES_PER_HOUR - 1) min++;
+        else if (hour == HOURS_PER_DAY - 1) {
+            hour = 0;
+            min = 0;
+        }
+        else {
+            hour++;
+            min = 0;
+        }
+    }
+
+    // Adds Δ minutes to the time on this clock.
+    public void toc(int delta) {
+        if (delta < 0) throw new IllegalArgumentException();
+        int minRepresentation = hour * MINUTES_PER_HOUR + min;
+        minRepresentation += delta;
+        int newHour = minRepresentation / MINUTES_PER_HOUR;
+        int newMin = minRepresentation - MINUTES_PER_HOUR * newHour;
+        hour = newHour % HOURS_PER_DAY;
+        min = newMin % MINUTES_PER_HOUR;
+    }
+
+    public static void main(String[] args) {
+        Clock userTime = new Clock(23, 55);
+        Clock otherTime = new Clock("08:45");
+        StdOut.println(userTime.toString());
+        userTime.tic();
+        StdOut.println(userTime.toString());
+        userTime.toc(15);
+        StdOut.println(userTime.toString());
+        StdOut.println(userTime.isEarlierThan(otherTime));
+        StdOut.println(otherTime.toString());
+        otherTime.toc(1441);
+        StdOut.println(otherTime.toString());
+    }
+}
+
+
+
+```
+
+
+
+## Exceptions
+
+Exceptions are a signal that something went wrong in the execution of the program. However, we can plan ahead and proactively throw exceptions ourselves.
+
+```java
+
+
+if (condition === True)
+    // this is an existing exception in Java, you can create your own as well. In the evn everything is a class.
+    throw new IllegalArgumentException();
+
 
 ```
