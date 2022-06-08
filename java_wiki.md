@@ -797,8 +797,6 @@ public class Clock {
 
 ```
 
-
-
 ## Exceptions
 
 Exceptions are a signal that something went wrong in the execution of the program. However, we can plan ahead and proactively throw exceptions ourselves.

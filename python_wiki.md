@@ -18,6 +18,9 @@ answer = input("Input name.")
 # user output - string concatenation, only works if answer is string
 print("hello, " + answer)
 
+# however, you can do type casting to coerce this behavior
+test = 5
+print("hello, " + str(test))
 # user output 2 - works with any variable type
 print(f"hello, {answer}")
 
@@ -82,6 +85,24 @@ except FileNotFoundError:
 - tuple - stores values in this form (x,y,...). Immutable
 - dict - stores keys and values { "name" : "Beily", "number": 1}
 - set - collection of values without duplicates
+
+
+### Checking Data Type
+
+```python
+
+test = 5
+
+isinstance(test, int) # True
+isinstance(test, str) # False
+
+"""
+Please note the test above works on any type of object, even if they are custom defined - please see Objects section below
+
+"""
+
+
+```
 
 ### Functions and main execution
 
@@ -374,6 +395,14 @@ lst[-2] # grabs the semi-last! 5
 ```
 
 Slicing also works on strings.
+
+```python
+
+# remove last character from string
+string[:-1]
+
+
+```` 
 
 ### List Methods
 
@@ -1716,6 +1745,19 @@ except ZeroDivisionError as e:
 
 Try statements can also be nested within each other.
 
+### Custom Exception Types
+
+We can extend the standard exceptions by creating new Exception classes.
+
+```python
+
+class CustomException(Exception):
+    """Exception to extend standard."""
+    pass
+
+
+
+```
 
 
 ## Quine (Python)
@@ -2860,6 +2902,11 @@ for item in info:
     print('Attribute', item['x'])
 
 
+## write the json to a file
+with open("filename.json", 'w') as out_file:
+        json.dump(input, out_file)
+
+
 ```
 
 Using JSON to communicate is quite common in today's service-oriented world, where we leverage multiple APIs (Application Program Interfaces).
@@ -2898,6 +2945,11 @@ text = json.dumps(obj, sort_keys = True, indent = 4)
 
 # loads the json into a python dictionary
 dictionary = json.loads(obj)
+
+## write the json to a file
+with open("filename.json", 'w') as out_file:
+        json.dump(response, out_file)
+
 
 ```
 

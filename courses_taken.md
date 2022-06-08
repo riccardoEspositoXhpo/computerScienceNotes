@@ -50,21 +50,34 @@
   - Scheme
   - SQL
 
-## Programming With a Purpose
+## Programming With a Purpose - DONE
 
 - Format:
   - Coursera
 
 - Topics Learned:
+  - Modular Programming with Java
+  - Object Oriented Programming
 
 - Programming Tools:
   - Java
+  - IntelliJ
+
+## Algorithms - IN PROGRESS
+
+- Format:
+  - Coursera
+
+- Topics Learned:
+  - tbd
+
+- Programming Tools:
+  - tbd
 
 ## Next Courses List
 
 - <https://www.coursera.org/learn/algorithms-part1>
 - <https://www.coursera.org/learn/algorithms-part2>
 - CS61B - Youtube Playlist & Course contents
-- C for everybody (continuation of PY4E)
 - CS50 intro to machine learning
 - Ossu Computer Science Degree - <https://github.com/ossu/computer-science>
