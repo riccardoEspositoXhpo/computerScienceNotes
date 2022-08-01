@@ -69,10 +69,10 @@
   - Coursera
 
 - Topics Learned:
-  - tbd
+  - Union Find
 
 - Programming Tools:
-  - tbd
+  - Java
 
 ## Next Courses List
 
